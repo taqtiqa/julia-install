@@ -1,2 +1,5 @@
 /test/src/
 /test/home/
+
+# VS Code settings
+.vscode
