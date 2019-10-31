@@ -1,7 +1,7 @@
 SHELL=/usr/bin/env bash
-NAME=ruby-install
+NAME=julia-install
 VERSION=0.7.0
-AUTHOR=postmodern
+AUTHOR=jlenv
 URL=https://github.com/$(AUTHOR)/$(NAME)
 
 DIRS=bin share
@@ -23,11 +23,11 @@ all:
 pkg:
 	mkdir $(PKG_DIR)
 
-share/man/man1/ruby-install.1: doc/man/ruby-install.1.md
-	kramdown-man doc/man/ruby-install.1.md > share/man/man1/ruby-install.1
+share/man/man1/julia-install.1: doc/man/julia-install.1.md
+	kramdown-man doc/man/julia-install.1.md > share/man/man1/julia-install.1
 
-man: doc/man/ruby-install.1.md share/man/man1/ruby-install.1
-	git add doc/man/ruby-install.1.md share/man/man1/ruby-install.1
+man: doc/man/julia-install.1.md share/man/man1/julia-install.1
+	git add doc/man/julia-install.1.md share/man/man1/julia-install.1
 	git commit
 
 download: pkg
@@ -63,8 +63,8 @@ release: tag download sign
 
 rpm:
 	rpmdev-setuptree
-	spectool -g -R rpm/ruby-install.spec
-	rpmbuild -ba rpm/ruby-install.spec
+	spectool -g -R rpm/julia-install.spec
+	rpmbuild -ba rpm/julia-install.spec
 
 install:
 	for dir in $(INSTALL_DIRS); do mkdir -p $(DESTDIR)$(PREFIX)/$$dir; done

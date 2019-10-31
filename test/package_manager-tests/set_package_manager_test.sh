@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 . ./test/helper.sh
-. ./share/ruby-install/package_manager.sh
+. ./share/julia-install/package_manager.sh
 
 function test_set_package_manager_with_apt()
 {

@@ -1,16 +1,9 @@
-# julia-install
+### 0.1.0 / 2019-10-31
 
-[![Build Status](https://travis-ci.org/jlenv/julia-install.svg?branch=master)](https://travis-ci.org/jlenv/julia-install)
-
-Builds and installs signed [Julia] sources. Compatible with `chjulia`
-and `jlenv-chjl`.
-
-Please see the full [documentation](https://jlenv.github.io/julia-install).
-
-## Features
+Initial Julia release.
 
 * Supports installing arbitrary versions.
-* Supports downloading the latest versions from [julia-versions].
+* Supports downloading the latest versions and checksums from [julia-versions].
 * Verifies GPG signatures of Julia archives.
 * Compatible with `chjulia` and the `jlenv` plugin `jlenv-chjl`.
 * Supports default install to XDG Base Directories [specification][xdg-spec]
@@ -49,8 +42,14 @@ Please see the full [documentation](https://jlenv.github.io/julia-install).
   * [brew]
 * Has tests.
 
-## Anti-Features
+[xdg-spec]: https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
 
-* Does not require updating every time a new Julia version comes out.
-* Does not require recipes for each individual Julia version or configuration.
-* Does not support installing trunk/HEAD.
+[apt]: http://wiki.debian.org/Apt
+[dnf]: https://fedoraproject.org/wiki/Features/DNF
+[yum]: http://yum.baseurl.org/
+[pacman]: https://wiki.archlinux.org/index.php/Pacman
+[brew]: http://mxcl.github.com/homebrew/
+
+[Julia]: http://www.julialang.org/
+
+[julia-versions]: https://github.com/jlenv/julia-versions#readme

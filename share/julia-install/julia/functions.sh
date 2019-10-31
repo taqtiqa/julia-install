@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+julia_version_family="${julia_version:0:3}"
+julia_archive="julia-$julia_version.tar.gz"
+julia_archive_sig="julia-$julia_version.tar.gz.asc"
+julia_full_archive="julia-$julia_version-full.tar.gz"
+julia_full_archive_sig="julia-$julia_version-full.tar.gz.asc"
+julia_dir_name="julia-$julia_version"
+julia_mirror="${julia_mirror:-https://cache.julialang.org/pub/julia}"
+julia_url="${julia_url:-$julia_mirror/$julia_version_family/$julia_archive}"
+
+#
+# Configures Julia.
+#
+function configure_julia()
+{
+	if [[ ! -s configure || configure.in -nt configure ]]; then
+		log "Regenerating ./configure script ..."
+		autoreconf || return $?
+	fi
+
+	local opt_dir
+
+	log "Configuring julia $julia_version ..."
+	case "$package_manager" in
+		brew)
+			opt_dir="$(brew --prefix openssl):$(brew --prefix readline):$(brew --prefix libyaml):$(brew --prefix gdbm)"
+			;;
+		port)
+			opt_dir="/opt/local"
+			;;
+	esac
+
+	./configure --prefix="$install_dir" \
+		    "${opt_dir:+--with-opt-dir="$opt_dir"}" \
+		    "${configure_opts[@]}" || return $?
+}
+
+#
+# Cleans Julia.
+#
+function clean_julia()
+{
+	log "Cleaning julia $julia_version ..."
+	make clean || return $?
+}
+
+#
+# Compiles Julia.
+#
+function compile_julia()
+{
+	log "Compiling julia $julia_version ..."
+	make "${make_opts[@]}" || return $?
+}
+
+#
+# Installs Julia into $install_dir
+#
+function install_julia()
+{
+	log "Installing julia $julia_version ..."
+	make install || return $?
+}

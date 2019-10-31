@@ -7,13 +7,13 @@ install_dir="./test/dir"
 function setUp()
 {
 	mkdir -p "$install_dir/bin"
-	touch -m "$install_dir/bin/ruby"
-	chmod +x "$install_dir/bin/ruby"
+	touch -m "$install_dir/bin/julia"
+	chmod +x "$install_dir/bin/julia"
 }
 
-function test_no_reinstall_when_ruby_executable_exists()
+function test_no_reinstall_when_julia_executable_exists()
 {
-	local output="$(ruby-install --install-dir "$install_dir" --no-reinstall ruby)"
+	local output="$(julia-install --install-dir "$install_dir" --no-reinstall julia)"
 
 	assertEquals "did not return 0" 0 $?
 	assertTrue "did not print a message to STDOUT" \

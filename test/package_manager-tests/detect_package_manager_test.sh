@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 . ./test/helper.sh
-. ./share/ruby-install/package_manager.sh
+. ./share/julia-install/package_manager.sh
 
 function setUp()
 {

@@ -2,7 +2,7 @@
 
 . ./test/helper.sh
 
-URL="https://raw.github.com/postmodern/ruby-install/master/README.md"
+URL="https://raw.github.com/taqtiqa-mark/julia-install/master/README.md"
 OUTPUT="./test/download.txt"
 
 function test_download()

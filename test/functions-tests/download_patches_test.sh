@@ -1,29 +1,29 @@
 #!/usr/bin/env bash
 
 . ./test/helper.sh
-. ./share/ruby-install/functions.sh
+. ./share/julia-install/functions.sh
 
-patches=("https://gist.github.com/funny-falcon/2981959/raw/ary-queue.diff" "local.patch")
-ruby_dir_name="ruby-1.9.3-p448"
+patches=("https://raw.githubusercontent.com/JuliaLang/julia/master/deps/patches/SuiteSparse-shlib.patch" "local.patch")
+julia_dir_name="julia-1.0.3-p1"
 
 function setUp()
 {
-	mkdir -p "$src_dir/$ruby_dir_name"
+	mkdir -p "$src_dir/$julia_dir_name"
 }
 
 function test_download_patches()
 {
 	download_patches 2>/dev/null
 
-	assertTrue "did not download patches to \$src_dir/\$ruby_dir_name" \
-		   '[[ -f "$src_dir/$ruby_dir_name/ary-queue.diff" ]]'
+	assertTrue "did not download patches to \$src_dir/\$julia_dir_name" \
+		   '[[ -f "$src_dir/$julia_dir_name/SuiteSparse-shlib.patch" ]]'
 	assertEquals "did not update \$patches" \
-		     "${patches[0]}" "$src_dir/$ruby_dir_name/ary-queue.diff"
+		     "${patches[0]}" "$src_dir/$julia_dir_name/SuiteSparse-shlib.patch"
 }
 
 function tearDown()
 {
-	rm -r "$src_dir/$ruby_dir_name"
+	rm -r "$src_dir/$julia_dir_name"
 }
 
 SHUNIT_PARENT=$0 . $SHUNIT2

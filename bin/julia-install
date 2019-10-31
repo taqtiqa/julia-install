@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+[ -n "$JLENV_DEBUG" ] && set -o xtrace
+
+source "${0%/*}/../share/julia-install/julia-install.sh"
+
+parse_options "$@" || exit $?
+
+if [[ -z "$julia" ]]; then
+	list_julias
+	exit $?
+fi
+
+if [[ $force_update -eq 1 ]] || are_julia_versions_missing "$julia"; then
+	log "Updating $julia versions ..."
+	download_julia_versions "$julia" || fail "Failed to download $julia versions!"
+fi
+
+init || exit $?
+
+if [[ $no_reinstall -eq 1 ]] && [[ -x "$install_dir/bin/julia" ]]; then
+	log "Julia is already installed into $install_dir"
+	exit
+fi
+
+log "Installing $julia $julia_version into $install_dir ..."
+
+pre_install || fail "Pre-install tasks failed!"
+
+if [[ ! $no_install_deps -eq 1 ]]; then
+	install_deps || fail "Installing dependencies failed!"
+fi
+
+if [[ ! $no_download -eq 1 ]]; then
+	download_julia || fail "Download of $julia_url failed!"
+fi
+
+if [[ ! $no_verify -eq 1 ]]; then
+	verify_julia || fail "Verification of $julia_archive failed!"
+fi
+
+if [[ ! $no_extract -eq 1 ]]; then
+	extract_julia   || fail "Unpacking of $julia_archive failed!"
+fi
+
+download_patches || fail "Fetching patches $patches failed!"
+apply_patches    || fail "Patching $julia $julia_version failed!"
+cd "$src_dir/$julia_dir_name"
+configure_julia  || fail "Configuration of $julia $julia_version failed!"
+clean_julia      || fail "Cleaning $julia $julia_version failed!"
+compile_julia    || fail "Compiling $julia $julia_version failed!"
+install_julia    || fail "Installation of $julia $julia_version failed!"
+post_install     || fail "Post-install tasks failed!"
+
+if [[ $cleanup -eq 1 ]]; then
+	cleanup_source  || fail "Cleanup of archive and unpacked source in $src_dir/ failed!"
+fi
+
+log "Successfully installed $julia $julia_version into $install_dir"
