@@ -1,7 +1,7 @@
 # Don't track GPG secret keys generated in the example sript
 # An abundance of caution.
 *.sec
-
+.gnupg
 /test/src/
 /test/home/
 
