@@ -1,6 +1,16 @@
-%no-protection
-Key-Type: default
-Subkey-Type: default
-Name-Real: YOUR NAME
-Name-Email: YOUR EMAIL@example.com
+%echo Generating a basic OpenPGP key
+Key-Type: RSA
+Key-Length: 2048
+Subkey-Type: RSA
+Subkey-Length: 2048
+Name-Real: User 1
+Name-Comment: User 1
+Name-Email: user.at.1.com
 Expire-Date: 0
+%no-ask-passphrase
+%no-protection
+%pubring julia-install.pub
+%secring julia-install.sec
+# Do a commit here, so that we can later print done :-)
+%commit
+%echo done

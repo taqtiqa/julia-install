@@ -19,8 +19,10 @@ function setUp()
 function setUp()
 {
 	unset julia_archive
-	unset src_dir
-	src_dir="$PWD/test/factory"
+	#unset src_dir
+	#src_dir="$PWD/test/factory"
+	cp "$PWD/test/factory/hello-world.txt" "${src_dir}"
+	cp "$PWD/test/factory/hello-world.txt.asc" "${src_dir}"
   julia_archive="hello-world.txt"
 }
 function test_julia_signature_for_with_gpg()
@@ -34,9 +36,9 @@ function test_julia_signature_for_with_gpg()
 		     "$output"
 }
 
-function tearDown()
-{
-	rm -r "$src_dir/$julia_dir_name"
-}
+# function tearDown()
+# {
+# 	# rm -r "$src_dir/$julia_dir_name"
+# }
 
 SHUNIT_PARENT=$0 . $SHUNIT2

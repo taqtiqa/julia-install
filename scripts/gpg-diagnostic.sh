@@ -6,19 +6,28 @@ function gpg_diagnostic()
   mkdir -m 0700 .gnupg
   touch .gnupg/gpg.conf
   chmod 600 .gnupg/gpg.conf
+  mkdir -p .gnupg/private-keys-v1.d
+  chmod 700 .gnupg/private-keys-v1.d
+
   # tail -n +4 /usr/share/gnupg2/gpg-conf.skel > .gnupg/gpg.conf
 
   cd .gnupg
   # I removed this line since these are created if a list key is done.
   # touch .gnupg/{pub,sec}ring.gpg
+  # echo "---------------------------------------------------------------"
+  # echo "STEP 1a: Check keyrings are empty"
+# gpg --homedir ./ \
+# --verbose \
+# --no-default-keyring \
+# --armor \
+# --secret-keyring ./julia-install.sec \
+# --keyring ./julia-install.pub \
+# --list-keys
+
   echo "---------------------------------------------------------------"
-  echo "STEP 1: Check keyrings are empty"
-gpg --homedir ./ \
---verbose \
---list-keys
+  echo "STEP 1b: Create key generation script"
 
-
-  tee gen-key-script <<EOF
+tee gen-key-script <<EOF
 %echo Generating a basic OpenPGP key
 Key-Type: RSA
 Key-Length: 2048
@@ -30,9 +39,9 @@ Name-Email: user.at.1.com
 Expire-Date: 0
 %no-ask-passphrase
 %no-protection
-%pubring ./julia-install.pub
-%secring ./julia-install.sec
-# Do a commit here, so that we can later print "done" :-)
+%pubring julia-install.pub
+%secring julia-install.sec
+# Do a commit here, so that we can later print done :-)
 %commit
 %echo done
 EOF

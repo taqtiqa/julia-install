@@ -6,8 +6,8 @@
 # 2. Avoid GPG instructions required to setup GPG with
 #    Julia's keys.
 
-if   command -v gpg > /dev/null; then gpgcmd="gpg --verify"
-elif command -v gpg2 > /dev/null; then gitcmd="gpg2 --verify"
+if   command -v gpg > /dev/null; then gpgcmd="gpg"
+elif command -v gpg2 > /dev/null; then gitcmd="gpg2"
 fi
 
 # All work should be done is the XDG_CACHE_HOME for this script.
@@ -17,12 +17,12 @@ fi
 # Expects that $julia_install_cache_dir/$julia are set
 function verify_archive_signature(){
   dir="$julia_cache_dir"
-  keyfile="${dir}/juliareleases-v1.pub"
+  keyfile="${src_dir}/juliareleases.pub"
   signaturefile="$src_dir/${julia_archive}.asc"
   archivefile="$src_dir/${julia_archive}"
 
   # Import the key to GPG configured in the tmporary location
-  $gpgcmd --homedir "${dir}" \
+  $gpgcmd --homedir "${src_dir}/.gnupg" \
   --verbose \
   --no-default-keyring \
   --secret-keyring julia-install.sec \
@@ -30,9 +30,8 @@ function verify_archive_signature(){
   --import "${keyfile}"
 
   # Verify the archive file against the asc file
-  $gpgcmd --homedir "${dir}" \
+  $gpgcmd --homedir "${src_dir}/.gnupg" \
   --verbose \
-  --no-default-keyring \
   --secret-keyring julia-install.sec \
   --keyring julia-install.pub \
   --verify "${signaturefile}" "${archivefile}"
@@ -45,18 +44,23 @@ function verify_archive_signature(){
 #
 function setup_julia_public_key()
 {
-  # Setup tmp folder
-  dir="$julia_install_cache_dir/$julia"
+  rm -rf "${src_dir}/.gnupg"
+  mkdir -m 0700 "${src_dir}/.gnupg"
+  touch "${src_dir}/.gnupg/gpg.conf"
+  chmod 600 "${src_dir}/.gnupg/gpg.conf"
+  mkdir -p "${src_dir}/.gnupg/private-keys-v1.d"
+  chmod 700 "${src_dir}/.gnupg/private-keys-v1.d"
+
   # Echo Julia's public key used to verify signatures.
   # allow for the fact the key will change over time
   case $1 in 
       1)
-        file="${dir}/juliareleases-v1.pub"
+        file="${src_dir}/juliareleases.pub"
         gen_julia_pub_key_1 "${file}"
       ;;
       9999)
         # This is the test public key 
-        file="${dir}/juliareleases-v9999.pub"
+        file="${src_dir}/juliareleases.pub"
         gen_julia_pub_key_9999 "${file}"
       ;;
       *)
@@ -71,7 +75,7 @@ function setup_julia_public_key()
 # https://julialang.org/juliareleases.asc
 function gen_julia_pub_key_1()
 {
-    tee "${1}" <<EOF
+  cat <<EOF >>"${1}"
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1
 
@@ -131,7 +135,7 @@ EOF
 # ./test/factory/hello-world-pubkey.gpg
 function gen_julia_pub_key_9999()
 {
-    tee "${1}" <<EOF
+  cat <<EOF > "${1}"
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 
 mQENBF27YOIBCACqM4M1HO3qmmGP+rzvvOHeDFYjMsoXlkuEBt1Oq6sb2h5HP978
