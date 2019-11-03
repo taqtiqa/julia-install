@@ -13,11 +13,7 @@ function oneTimeSetUp()
 
 function setUp()
 {
-	mkdir -p "$src_dir/$julia_dir_name"
-}
-
-function setUp()
-{
+	mkdir -p "$src_dir"
 	unset julia_archive
 	#unset src_dir
 	#src_dir="$PWD/test/factory"
@@ -28,7 +24,7 @@ function setUp()
 function test_julia_signature_for_with_gpg()
 { 
 	setup_julia_public_key 9999
-	local expected_signature="julia-1.0.0.tar.gz.asc"
+	local expected_signature="Julia archive VERIFIED."
 	local output="$(verify_archive_signature)"
 
 	assertEquals "did not return the correct signature" \

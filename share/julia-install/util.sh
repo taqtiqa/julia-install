@@ -10,6 +10,13 @@ elif command -v curl >/dev/null; then downloader="curl"
 fi
 
 #
+# Auto-detect the signature verifirication utility.
+#
+if   command -v gpg2 > /dev/null; then sigcmd="gpg2"
+elif command -v gpg > /dev/null; then sigcmd="gpg"
+fi
+
+#
 # Don't use sudo if already root.
 #
 if (( UID == 0 )); then sudo=""

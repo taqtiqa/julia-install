@@ -6,10 +6,6 @@
 # 2. Avoid GPG instructions required to setup GPG with
 #    Julia's keys.
 
-if   command -v gpg > /dev/null; then gpgcmd="gpg"
-elif command -v gpg2 > /dev/null; then gitcmd="gpg2"
-fi
-
 # All work should be done is the XDG_CACHE_HOME for this script.
 # Until XDG is implemented use "$julia_install_cache_dir/$julia"
 
@@ -22,18 +18,30 @@ function verify_archive_signature(){
   archivefile="$src_dir/${julia_archive}"
 
   # Import the key to GPG configured in the tmporary location
-  $gpgcmd --homedir "${src_dir}/.gnupg" \
+  $sigcmd --homedir "${src_dir}/.gnupg" \
+  --batch \
+  --status-fd 2 \
   --verbose \
   --no-default-keyring \
-    --keyring julia-install.pub \
-  --import "${keyfile}"
+  --keyring julia-install.pub \
+  --import "${keyfile}"  < /dev/null
 
   # Verify the archive file against the asc file
-  $gpgcmd --homedir "${src_dir}/.gnupg" \
+  $sigcmd --homedir "${src_dir}/.gnupg" \
+  --batch \
+  --status-fd 2 \
   --no-default-keyring \
   --verbose \
   --keyring julia-install.pub \
-  --verify "${signaturefile}" "${archivefile}"
+  --verify "${signaturefile}" "${archivefile}" < /dev/null
+retval=$?
+if [ "${retval}" -ne 0 ]; then
+  echo "Julia archive NOT verified."
+  return 1
+else
+  echo "Julia archive VERIFIED."
+  return 0
+fi
 }
 
 # $1 is the version of the Julia public key to use.
@@ -67,7 +75,6 @@ function setup_julia_public_key()
         exit 1
       ;;
   esac
-
 }
 
 # This is the public key:
