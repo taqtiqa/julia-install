@@ -10,9 +10,24 @@
 # Until XDG is implemented use "$julia_install_cache_dir/$julia"
 
 # Called with out arguments:
-# Expects that $julia_install_cache_dir/$julia are set
-function verify_archive_signature(){
-  dir="$julia_cache_dir"
+# Expects that 
+# 1. $src_dir
+# 2. $julia_archive
+# 
+function compute_signature_gpg()
+{
+	local key_id=1
+  # Setup the Public key used to verify the signature.
+	setup_julia_public_key_gpg $key_id
+	local output="$(verify_archive_signature_gpg)"
+
+	echo -n "${output%% *}"
+}
+# Called with out arguments:
+# Expects that 
+# 1. $src_dir
+# 2. $julia_archive
+function verify_archive_signature_gpg(){
   keyfile="${src_dir}/juliareleases.pub"
   signaturefile="$src_dir/${julia_archive}.asc"
   archivefile="$src_dir/${julia_archive}"
@@ -49,7 +64,7 @@ fi
 # For tests we pass in 9999 and use the latest version file name
 #
 #
-function setup_julia_public_key()
+function setup_julia_public_key_gpg()
 {
   rm -rf "${src_dir}/.gnupg"
   mkdir -m 0700 "${src_dir}/.gnupg"

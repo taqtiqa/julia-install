@@ -30,7 +30,9 @@ function compute_signature()
 	local program
 
 	case "$algorithm" in
-		gpg)	program="$gpgcmd" ;;
+		gpg)	
+			result=compute_signature_gpg
+		;;
 		*)	return 1 ;;
 	esac
 
@@ -39,12 +41,7 @@ function compute_signature()
 		return 1
 	fi
 	
-	# Setup the Public key used to verify the signature.
-	#
-  setup_julia_public_key 1
-	local output="$(verify_archive_signature "${file}.asc" "${file}")"
-
-	echo -n "${output%% *}"
+	echo -n "${result}"
 }
 
 function verify_signature()

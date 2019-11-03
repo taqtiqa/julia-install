@@ -23,9 +23,9 @@ function setUp()
 }
 function test_julia_signature_for_with_gpg()
 { 
-	setup_julia_public_key 9999
+	setup_julia_public_key_gpg 9999
 	local expected_signature="Julia archive VERIFIED."
-	local output="$(verify_archive_signature)"
+	local output="$(verify_archive_signature_gpg)"
 
 	assertEquals "did not return the correct signature" \
 		     "$expected_signature" \
