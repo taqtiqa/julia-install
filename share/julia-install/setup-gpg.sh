@@ -24,6 +24,11 @@ function verify_archive_signature_gpg(){
   --no-default-keyring \
   --keyring julia-install.pub \
   --import "${keyfile}"  < /dev/null
+  # Fully trust imported keys - quiets GPG WARNING output
+  for fpr in $(gpg --homedir "${src_dir}/.gnupg" --no-default-keyring --keyring julia-install.pub --list-keys --with-colons  | awk -F: '/fpr:/ {print $10}' | sort -u)
+  do
+    echo -e "5\ny\n" |  gpg --homedir "${src_dir}/.gnupg" --no-default-keyring --keyring julia-install.pub --command-fd 0 --expert --edit-key $fpr trust
+  done
 
   # Verify the archive file against the asc file
   $gpgcmd --homedir "${src_dir}/.gnupg" \
@@ -33,14 +38,13 @@ function verify_archive_signature_gpg(){
   --no-default-keyring \
   --keyring julia-install.pub \
   --verify "${signaturefile}" "${archivefile}" < /dev/null
-retval=$?
-if [ "${retval}" -ne 0 ]; then
-  echo "Julia archive NOT verified."
-  return 1
-else
-  echo "Julia archive VERIFIED."
-  return 0
-fi
+  if [ "${?}" -ne 0 ]; then
+    echo "Julia archive NOT verified."
+    return 1
+  else
+    echo "Julia archive VERIFIED."
+    return 0
+  fi
 }
 
 # $1 is the version of the Julia public key to use.
@@ -52,26 +56,26 @@ function setup_julia_public_key_gpg()
 {
   echo $julia_install_cache_dir
   echo $src_dir
-  
+
   rm -rf "${src_dir}/.gnupg"
   mkdir -m 0700 "${src_dir}/.gnupg"
   touch "${src_dir}/.gnupg/gpg.conf"
   chmod 600 "${src_dir}/.gnupg/gpg.conf"
   mkdir -p "${src_dir}/.gnupg/private-keys-v1.d"
   chmod 700 "${src_dir}/.gnupg/private-keys-v1.d"
-	
+
   local sigsfile="${julia_install_cache_dir}/${julia}/signatures.${algorithm}"
 	local key_id=lookup_signature_id ${sigsfile} ${file}
-  
+
   # Echo Julia's public key used to verify signatures.
   # allow for the fact the key will change over time
-  case ${key_id} in 
+  case ${key_id} in
       1)
         file="${src_dir}/juliareleases.pub"
         gen_julia_pub_key_1 "${file}"
       ;;
       9999)
-        # This is the test public key 
+        # This is the test public key
         file="${src_dir}/juliareleases.pub"
         gen_julia_pub_key_9999 "${file}"
       ;;

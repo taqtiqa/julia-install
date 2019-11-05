@@ -10,9 +10,9 @@ Please see the full [documentation](https://jlenv.github.io/julia-install).
 ## Features
 
 * Supports installing arbitrary versions.
-* Supports downloading the latest versions from [julia-versions].
-* Verifies GPG signatures of Julia archives.
-* Compatible with `chjulia` and the `jlenv` plugin `jlenv-chjl`.
+* Supports downloading the latest versions from [julia-versions] or .
+* Supports verifying GPG signatures of Julia source archives.
+* Supports `chjulia` and the `jlenv` plugin `jlenv-chjl`.
 * Supports default install to XDG Base Directories [specification][xdg-spec]
   * User directories
     * `XDG_CONFIG_HOME`
@@ -37,7 +37,7 @@ Please see the full [documentation](https://jlenv.github.io/julia-install).
 * Supports downloading/applying patches.
 * Supports specifying arbitrary `./configure` options.
 * Supports downloading archives using `wget` or `curl`.
-* Supports verifying downloaded archives using `md5sum`, `md5` or `openssl md5`.
+* Supports verifying downloaded archives using `gpg`.
 * Supports installing build dependencies via the package manager:
   * [apt]
   * [dnf]
