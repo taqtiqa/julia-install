@@ -1,9 +1,17 @@
 SHELL=/usr/bin/env bash
 NAME=julia-install
-VERSION=0.7.0
-AUTHOR=jlenv
+VERSION=0.1.0
+AUTHOR=Mark Van de Vyver <mark@taqtiqa.com>
 URL=https://github.com/$(AUTHOR)/$(NAME)
 
+ifeq ($(OS),Windows_NT)
+    OPEN := start
+else
+    UNAME := $(shell uname -s)
+    ifeq ($(UNAME),Linux)
+        OPEN := xdg-open
+    endif
+endif
 DIRS=bin share
 INSTALL_DIRS=`find $(DIRS) -type d`
 INSTALL_FILES=`find $(DIRS) -type f`
