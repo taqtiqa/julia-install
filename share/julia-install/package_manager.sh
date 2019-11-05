@@ -51,7 +51,7 @@ function install_packages()
 		zypper) $sudo zypper -n in -l $* || return $? ;;
 		"")
 			warn "Could not determine Package Manager. Proceeding anyway."
-		;;
+		    ;;
 	esac
 }
 
