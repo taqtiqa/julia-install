@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source "$julia_install_dir/package_manager.sh"
+source "${julia_install_dir}/package_manager.sh"
 
 #
 # Auto-detect the downloader.
@@ -10,10 +10,17 @@ elif command -v curl >/dev/null; then downloader="curl"
 fi
 
 #
-# Auto-detect the signature verifirication utility.
+# Auto-detect GPG.
 #
-if   command -v gpg2 > /dev/null; then sigcmd="gpg2"
-elif command -v gpg > /dev/null; then sigcmd="gpg"
+if   command -v gpg2 > /dev/null; then gpgcmd="gpg2"
+elif command -v gpg > /dev/null; then gpgcmd="gpg"
+fi
+
+#
+# Auto-detect Git.
+#
+if   command -v git2 > /dev/null; then gitcmd="git2"
+elif command -v git > /dev/null; then gitcmd="git"
 fi
 
 #

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source "$julia_install_dir/signatures.sh"
+source "${julia_install_dir}/signatures.sh"
 
 #
 # Pre-install tasks

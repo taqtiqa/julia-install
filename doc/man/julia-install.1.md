@@ -103,7 +103,7 @@ https://github.com/jlenv/julia-install#readme
 
 ## EXAMPLES
 
-List supported Rubies and their major versions:
+List supported Julias and their major versions:
 
     $ julia-install
 

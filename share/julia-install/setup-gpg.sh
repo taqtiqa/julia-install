@@ -11,27 +11,26 @@
 
 # Called with out arguments:
 # Expects that $julia_install_cache_dir/$julia are set
-function verify_archive_signature(){
-  dir="$julia_cache_dir"
+function verify_archive_signature_gpg(){
   keyfile="${src_dir}/juliareleases.pub"
   signaturefile="$src_dir/${julia_archive}.asc"
   archivefile="$src_dir/${julia_archive}"
 
   # Import the key to GPG configured in the tmporary location
-  $sigcmd --homedir "${src_dir}/.gnupg" \
+  $gpgcmd --homedir "${src_dir}/.gnupg" \
   --batch \
   --status-fd 2 \
-  --verbose \
+  --with-colons \
   --no-default-keyring \
   --keyring julia-install.pub \
   --import "${keyfile}"  < /dev/null
 
   # Verify the archive file against the asc file
-  $sigcmd --homedir "${src_dir}/.gnupg" \
+  $gpgcmd --homedir "${src_dir}/.gnupg" \
   --batch \
   --status-fd 2 \
+  --with-colons \
   --no-default-keyring \
-  --verbose \
   --keyring julia-install.pub \
   --verify "${signaturefile}" "${archivefile}" < /dev/null
 retval=$?
@@ -49,18 +48,24 @@ fi
 # For tests we pass in 9999 and use the latest version file name
 #
 #
-function setup_julia_public_key()
+function setup_julia_public_key_gpg()
 {
+  echo $julia_install_cache_dir
+  echo $src_dir
+  
   rm -rf "${src_dir}/.gnupg"
   mkdir -m 0700 "${src_dir}/.gnupg"
   touch "${src_dir}/.gnupg/gpg.conf"
   chmod 600 "${src_dir}/.gnupg/gpg.conf"
   mkdir -p "${src_dir}/.gnupg/private-keys-v1.d"
   chmod 700 "${src_dir}/.gnupg/private-keys-v1.d"
-
+	
+  local sigsfile="${julia_install_cache_dir}/${julia}/signatures.${algorithm}"
+	local key_id=lookup_signature_id ${sigsfile} ${file}
+  
   # Echo Julia's public key used to verify signatures.
   # allow for the fact the key will change over time
-  case $1 in 
+  case ${key_id} in 
       1)
         file="${src_dir}/juliareleases.pub"
         gen_julia_pub_key_1 "${file}"

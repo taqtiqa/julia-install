@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
-source "$julia_install_dir/versions.sh"
-source "$julia_install_dir/signatures.sh"
+. "${julia_install_dir}/versions.sh"
+. "${julia_install_dir}/signatures.sh"
 
-julia_versions_url="https://raw.githubusercontent.com/jlenv/julia-versions/master"
-julia_versions_files=({versions,stable}.txt signatures.gpg)
+julia_versions_user=jlenv
+julia_versions_url="https://raw.githubusercontent.com/${julia_versions_user}/julia-versions/master"
+julia_versions_files=({versions,stable}.txt signatures.{gpg,ed})
 
 #
 # Determines if the julia-versions files are missing for a julia.
@@ -115,7 +116,7 @@ function julia_checksum_for()
 }
 
 #
-# Looks up a signature for $julia_archive.
+# Looks up a signature number for $julia_archive.
 #
 function julia_signature_for()
 {
@@ -124,7 +125,7 @@ function julia_signature_for()
 	local archive="$3"
 	local signatures="signatures.$algorithm"
 
-	lookup_signature "$julia_install_cache_dir/$julia/$signatures" "$archive"
+	lookup_signature_id "$julia_install_cache_dir/$julia/$signatures" "$archive"
 }
 
 #

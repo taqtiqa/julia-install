@@ -63,7 +63,7 @@ and `jlenv-chjl`.
 
 ## Synopsis
 
-List supported Rubies and their major versions:
+List supported Julias and their major versions:
 
     $ julia-install
 
@@ -179,7 +179,7 @@ julia-install is available on [Fedora Copr](https://copr.fedorainfracloud.org/co
 
 ### Julia
 
-Rubies older than 1.9.3-p429 will not compile with [Clang][clang] and require
+Julias older than 1.9.3-p429 will not compile with [Clang][clang] and require
 [GCC][gcc] >= 4.2. Normally, Linux and BSD systems will already have GCC
 installed. OS X users can install GCC via [homebrew]:
 
@@ -266,7 +266,7 @@ repository.**
   script.
 * Excessive OS specific workarounds. We should strive to fix any Julia build
   issues or OS environment issues at their source.
-* Building Rubies from HEAD. This is risky and may result in a buggy/broken
+* Building Julias from HEAD. This is risky and may result in a buggy/broken
   version of Julia. The user should build development versions of Julia by hand
   and report any bugs to upstream.
 

@@ -2,7 +2,7 @@
 
 shopt -s extglob
 
-julia_install_version="0.7.0"
+julia_install_version="0.1.0"
 julia_install_dir="${BASH_SOURCE[0]%/*}"
 julia_install_cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/julia-install"
 
@@ -23,8 +23,9 @@ else
 	julias_dir="$HOME/.julias"
 fi
 
-source "$julia_install_dir/util.sh"
-source "$julia_install_dir/julia-versions.sh"
+. "${julia_install_dir}/util.sh"
+. "${julia_install_dir}/julia-versions.sh"
+. "${julia_install_dir}/functions.sh"
 
 #
 # Prints usage information for julia-install.
@@ -36,7 +37,7 @@ usage: julia-install [OPTIONS] [JULIA [VERSION] [-- CONFIGURE_OPTS ...]]
 
 Options:
 
-	-r, --julias-dir DIR	Directory that contains other installed Rubies
+	-r, --julias-dir DIR	Directory that contains other installed Julias
 	-i, --install-dir DIR	Directory to install Julia into
 	    --prefix DIR        Alias for -i DIR
 	    --system		Alias for -i $system_dir
@@ -226,7 +227,7 @@ function parse_options()
 }
 
 #
-# Prints Rubies supported by julia-install.
+# Prints Julias supported by julia-install.
 #
 function list_julias()
 {

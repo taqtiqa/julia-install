@@ -13,7 +13,7 @@ function oneTimeSetUp()
 
 function test_julia_signature_for_with_gpg()
 {
-	local expected_signature="julia-1.0.0.tar.gz.asc"
+	local expected_signature_num="1"
 	local output="$(julia_signature_for "$julia" gpg "$julia_archive")"
 
 	assertEquals "did not return the correct signature" \
