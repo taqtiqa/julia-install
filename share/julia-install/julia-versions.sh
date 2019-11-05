@@ -5,7 +5,7 @@
 
 julia_versions_user=jlenv
 julia_versions_url="https://raw.githubusercontent.com/${julia_versions_user}/julia-versions/master"
-julia_versions_files=({versions,stable}.txt signatures.{gpg,ed})
+julia_versions_files=({versions,stable}.txt signatures.gpg)
 
 #
 # Determines if the julia-versions files are missing for a julia.

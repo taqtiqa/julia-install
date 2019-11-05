@@ -23,7 +23,6 @@ function lookup_signature_id()
 function compute_signature()
 {
     local algorithm="$1"
-    local file="$2"
     local program
 
     case "$algorithm" in
@@ -31,19 +30,14 @@ function compute_signature()
             local output="$(verify_archive_signature_gpg)"
         ;;
         ed)
-            program="${mnsgncmd}"
+            local output="$(verify_archive_signature_ed)"
         ;;
         *)
             return 1
         ;;
     esac
 
-    if [[ -z "$program" ]]; then
-        error "could not find $algorithm signature utility"
-        return 1
-    fi
-
-    echo -n "${output%% *}"
+    echo -n "${output}"
 }
 
 function verify_signature()
