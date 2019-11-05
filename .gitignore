@@ -7,3 +7,6 @@
 
 # VS Code settings
 .vscode
+
+# merge conflict original files
+*.orig
