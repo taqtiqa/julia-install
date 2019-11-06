@@ -86,6 +86,16 @@ Vagrant.configure(2) do |config|
       #ubuntu_docker config
     end
   end
+  'ubuntu-1404'.tap do |box|
+    config.vm.define box, define_opts do |config|
+      config.vm.box = 'elastic/ubuntu-16.04-x86_64'
+      deb_common config, box, extra: <<-SHELL
+        # Install common early bootstrap-install requirements.
+        echo 'No boostrap install requirements.'
+      SHELL
+      #ubuntu_docker config
+    end
+  end
   'ubuntu-1604'.tap do |box|
     config.vm.define box, define_opts do |config|
       config.vm.box = 'elastic/ubuntu-16.04-x86_64'
@@ -122,6 +132,13 @@ Vagrant.configure(2) do |config|
       deb_docker config
     end
   end
+  'debian-10'.tap do |box|
+    config.vm.define box, define_opts do |config|
+      config.vm.box = 'elastic/debian-9-x86_64'
+      deb_common config, box
+      deb_docker config
+    end
+  end
   'centos-6'.tap do |box|
     config.vm.define box, define_opts do |config|
       config.vm.box = 'elastic/centos-6-x86_64'
@@ -129,6 +146,13 @@ Vagrant.configure(2) do |config|
     end
   end
   'centos-7'.tap do |box|
+    config.vm.define box, define_opts do |config|
+      config.vm.box = 'elastic/centos-7-x86_64'
+      rpm_common config, box
+      rpm_docker config
+    end
+  end
+  'centos-8'.tap do |box|
     config.vm.define box, define_opts do |config|
       config.vm.box = 'elastic/centos-7-x86_64'
       rpm_common config, box
@@ -147,21 +171,13 @@ Vagrant.configure(2) do |config|
       rpm_common config, box
     end
   end
-  'fedora-28'.tap do |box|
+  'oel-8'.tap do |box|
     config.vm.define box, define_opts do |config|
-      config.vm.box = 'elastic/fedora-28-x86_64'
-      dnf_common config, box
-      dnf_docker config
+      config.vm.box = 'elastic/oraclelinux-7-x86_64'
+      rpm_common config, box
     end
   end
-  'fedora-29'.tap do |box|
-    config.vm.define box, define_opts do |config|
-      config.vm.box = 'elastic/fedora-29-x86_64'
-      dnf_common config, box
-      dnf_docker config
-    end
-  end
-  'opensuse-42'.tap do |box|
+  'sles-11'.tap do |box|
     config.vm.define box, define_opts do |config|
       config.vm.box = 'elastic/opensuse-42-x86_64'
       suse_common config, box
@@ -173,6 +189,22 @@ Vagrant.configure(2) do |config|
       sles_common config, box
     end
   end
+  'sles-15'.tap do |box|
+    config.vm.define box, define_opts do |config|
+      config.vm.box = 'elastic/sles-12-x86_64'
+      sles_common config, box
+    end
+  end
+  'rhel-6'.tap do |box|
+    config.vm.define box, define_opts do |config|
+      config.vm.box = 'elastic/rhel-8-x86_64'
+      rpm_common config, box
+    end
+  'rhel-7'.tap do |box|
+    config.vm.define box, define_opts do |config|
+      config.vm.box = 'elastic/rhel-8-x86_64'
+      rpm_common config, box
+    end
   'rhel-8'.tap do |box|
     config.vm.define box, define_opts do |config|
       config.vm.box = 'elastic/rhel-8-x86_64'
@@ -180,25 +212,25 @@ Vagrant.configure(2) do |config|
     end
   end
 
-  windows_2012r2_box = ENV['VAGRANT_WINDOWS_2012R2_BOX']
-  if windows_2012r2_box && windows_2012r2_box.empty? == false
-    'windows-2012r2'.tap do |box|
-      config.vm.define box, define_opts do |config|
-        config.vm.box = windows_2012r2_box
-        windows_common config, box
-      end
-    end
-  end
+  # windows_2012r2_box = ENV['VAGRANT_WINDOWS_2012R2_BOX']
+  # if windows_2012r2_box && windows_2012r2_box.empty? == false
+  #   'windows-2012r2'.tap do |box|
+  #     config.vm.define box, define_opts do |config|
+  #       config.vm.box = windows_2012r2_box
+  #       windows_common config, box
+  #     end
+  #   end
+  # end
 
-  windows_2016_box = ENV['VAGRANT_WINDOWS_2016_BOX']
-  if windows_2016_box && windows_2016_box.empty? == false
-    'windows-2016'.tap do |box|
-      config.vm.define box, define_opts do |config|
-        config.vm.box = windows_2016_box
-        windows_common config, box
-      end
-    end
-  end
+  # windows_2016_box = ENV['VAGRANT_WINDOWS_2016_BOX']
+  # if windows_2016_box && windows_2016_box.empty? == false
+  #   'windows-2016'.tap do |box|
+  #     config.vm.define box, define_opts do |config|
+  #       config.vm.box = windows_2016_box
+  #       windows_common config, box
+  #     end
+  #   end
+  # end
 end
 
 def deb_common(config, name, extra: '')
