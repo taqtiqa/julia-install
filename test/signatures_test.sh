@@ -75,7 +75,7 @@ function test_compute_signature_with_missing_file()
 function test_verify_signature_gpg()
 {
 	julia_archive="hello-world.txt"
-	verify_signature "$file" gpg "Julia archive VERIFIED."
+	verify_signature "$file" gpg
 	assertEquals "signature was not valid" 0 $?
 	
 }

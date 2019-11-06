@@ -65,7 +65,7 @@ function setup_julia_public_key_gpg()
   chmod 700 "${src_dir}/.gnupg/private-keys-v1.d"
 
   local sigsfile="${julia_install_cache_dir}/${julia}/signatures.${algorithm}"
-	local key_id=lookup_signature_id ${sigsfile} ${file}
+	local key_id="$(lookup_signature_id ${sigsfile} ${file})"
 
   # Echo Julia's public key used to verify signatures.
   # allow for the fact the key will change over time

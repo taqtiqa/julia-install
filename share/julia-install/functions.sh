@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source "${julia_install_dir}/signatures.sh"
+. "${julia_install_dir}/signatures.sh"
 
 #
 # Pre-install tasks
@@ -50,7 +50,7 @@ function verify_julia()
 
 	local file="$src_dir/$julia_archive"
 
-	verify_signature "$file" gpg "$julia_gpg"       || return $?
+	verify_signature "$file" gpg || return $?
 }
 
 #

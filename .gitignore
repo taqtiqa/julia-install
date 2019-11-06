@@ -10,3 +10,6 @@
 
 # merge conflict original files
 *.orig
+
+# Build test artifacts
+.vagrant/

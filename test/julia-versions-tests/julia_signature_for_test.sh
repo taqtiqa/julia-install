@@ -17,7 +17,7 @@ function test_julia_signature_for_with_gpg()
 	local output="$(julia_signature_for "$julia" gpg "$julia_archive")"
 
 	assertEquals "did not return the correct signature" \
-		     "$expected_signature" \
+		     "$expected_signature_num" \
 		     "$output"
 }
 

@@ -55,9 +55,8 @@ and `jlenv-chjl`.
 
 * [bash] >= 3.x
 * [wget] > 1.12 or [curl]
-* `md5sum`, `md5` or `openssl md5`.
+* `gpg`.
 * `tar`
-* `bzip2`
 * `patch` (if `--patch` is specified)
 * [gcc] >= 4.2 or [clang]
 
@@ -65,111 +64,157 @@ and `jlenv-chjl`.
 
 List supported Julias and their major versions:
 
-    $ julia-install
+```bash
+julia-install
+```
 
 List the latest versions:
 
-    $ julia-install --latest
+```bash
+julia-install --latest
+```
 
 Install the current stable version of Julia:
 
-    $ julia-install julia
+```bash
+julia-install julia
+```
 
 Install the latest version of Julia:
 
-    $ julia-install --latest julia
+```bash
+julia-install --latest julia
+```
 
 Install a stable version of Julia:
 
-    $ julia-install julia 2.3
+```bash
+julia-install julia 1.0
+```
 
 Install a specific version of Julia:
 
-    $ julia-install julia 2.2.4
+```bash
+julia-install julia 1.0.4
+```
 
 Install a Julia into a specific directory:
 
-    $ julia-install --install-dir /path/to/dir julia
+```bash
+julia-install --install-dir /path/to/dir julia
+```
 
 Install a Julia into a specific `julias` directory:
 
-    $ julia-install --julias-dir /path/to/julias/ julia
+```bash
+julia-install --julias-dir /path/to/julias/ julia
+```
 
 Install a Julia into `/usr/local`:
 
-    $ julia-install --system julia 2.4.0
+```bash
+julia-install --system julia 1.0.4
+```
 
 Install a Julia from an official site with directly download:
 
-    $ julia-install -M https://ftp.julialang.org/pub/julia julia 2.4.0
+```bash
+julia-install -M https://ftp.julialang.org/pub/julia julia 1.0.4
+```
 
-Install a Julia from a mirror:
+Install a Julia from a mirror (hypothetical):
 
-    $ julia-install -M http://www.mirrorservice.org/sites/ftp.julialang.org/pub/julia julia 1.0.0-p645
+```bash
+julia-install -M http://www.mirrorservice.org/sites/julialang.org/pub/julia julia 1.0.0-p15
+```
 
 Install a Julia with a specific patch:
 
-    $ julia-install -p https://raw.github.com/gist/4136373/falcon-gc.diff julia 1.9.3-p551
+```bash
+julia-install -p https://raw.githubusercontent.com/JuliaLang/julia/master/deps/patches/SuiteSparse-shlib.patch" "local.patch julia 1.0.3-p1
+```
 
 Install a Julia with a specific C compiler:
 
-    $ julia-install julia 2.4.0 -- CC=gcc-4.9
+```bash
+julia-install julia 1.4.0 -- CC=gcc-4.9
+```
 
 Install a Julia with specific configuration:
 
-    $ julia-install julia 2.4.0 -- --enable-shared --enable-dtrace CFLAGS="-O3"
+```bash
+julia-install julia 1.4.0 -- --enable-shared --enable-dtrace CFLAGS="-O3"
+```
 
 Install a Julia without installing dependencies first:
 
-    $ julia-install --no-install-deps julia 2.4.0
+```bash
+julia-install --no-install-deps julia 1.0.4
+```
 
 Uninstall a Julia version:
 
-    $ rm -rf ~/.julias/julia-2.4.0
+```bash
+rm -rf ~/.julias/julia-1.0.4
+```
 
 ### Integration
 
-Using julia-install with [RVM]:
+Using julia-install with [chjulia]:
 
-    $ julia-install --julias-dir ~/.rvm/julias julia 2.4.0
+```bash
+julia-install --julias-dir /usr/local/share/julias julia 1.0.4
+```
 
 Using julia-install with [jlenv]:
 
-    $ julia-install --install-dir ~/.jlenv/versions/2.4.0 julia 2.4.0
+```bash
+julia-install --install-dir ~/.jlenv/julias/1.0.4 julia 1.0.4
+```
 
-julia-install can even be used with [Chef].
+`julia-install` can also be used with [Chef].
 
 ## Install
 
-    wget -O julia-install-0.7.0.tar.gz https://github.com/jlenv/julia-install/archive/v0.7.0.tar.gz
-    tar -xzvf julia-install-0.7.0.tar.gz
-    cd julia-install-0.7.0/
-    sudo make install
+```bash
+wget -O julia-install-0.1.0.tar.gz https://github.com/jlenv/julia-install/archive/v0.1.0.tar.gz
+tar -xzvf julia-install-0.1.0.tar.gz
+cd julia-install-0.1.0/
+sudo make install
+```
 
-### PGP
+### Signify
 
-All releases are [PGP] signed for security. Instructions on how to import my
-PGP key can be found on my [blog][1]. To verify that a release was not tampered
-with:
+All releases are [Signify] signed for security.
+Instructions on how to import my Signify key can be found on my [blog][1].
+To verify that a release was not tampered with:
 
-    wget https://raw.github.com/jlenv/julia-install/master/pkg/julia-install-0.7.0.tar.gz.asc
-    gpg --verify julia-install-0.7.0.tar.gz.asc julia-install-0.7.0.tar.gz
+```bash
+wget https://raw.github.com/jlenv/julia-install/master/pkg/julia-install-0.7.0.tar.gz.asc
+signify --verify julia-install-0.7.0.tar.gz.asc julia-install-0.7.0.tar.gz
+```
 
 ### Homebrew
 
 julia-install can also be installed with [homebrew]:
 
-    brew install julia-install
+```bash
+brew install julia-install
+```
 
 Or the absolute latest julia-install can be installed from source:
 
-    brew install julia-install --HEAD
+```bash
+brew install julia-install --HEAD
+```
 
 ### Arch Linux
 
 julia-install is already included in the [AUR]:
 
-    yaourt -S julia-install
+```bash
+yaourt -S julia-install
+```
 
 ### Fedora Linux
 
@@ -183,12 +228,16 @@ Julias older than 1.9.3-p429 will not compile with [Clang][clang] and require
 [GCC][gcc] >= 4.2. Normally, Linux and BSD systems will already have GCC
 installed. OS X users can install GCC via [homebrew]:
 
-    brew tap homebrew/versions
-    brew install gcc49
+```bash
+brew tap homebrew/versions
+brew install gcc49
+```
 
 And run julia-install again:
 
-    julia-install julia 2.4.0 -- CC=gcc-4.9
+```bash
+julia-install julia 1.0.4 -- CC=gcc-4.9
+```
 
 # Contributing
 
@@ -212,31 +261,31 @@ repository.**
   respectively.
 * Prefer single-line expressions where appropriate:
 
-  ```bash
-  [[ -n "$foo" ]] && other command
+```bash
+[[ -n "$foo" ]] && other command
 
-  if   [[ "$foo" == "bar" ]]; then command
-  elif [[ "$foo" == "baz" ]]; then other_command
-  fi
+if   [[ "$foo" == "bar" ]]; then command
+elif [[ "$foo" == "baz" ]]; then other_command
+fi
 
-  case "$foo" in
-    bar) command ;;
-    baz) other_command ;;
-  esac
-  ```
+case "$foo" in
+  bar) command ;;
+  baz) other_command ;;
+esac
+```
 
 * Use the `function` keyword for functions.
 * Put curly braces on a new line so they align.
 * Load function arguments into local variables for readability:
 
-  ```bash
-  function do_stuff()
-  {
-    local julia="$1"
-    local version="$2"
-    # ...
-  }
-  ```
+```bash
+function do_stuff()
+{
+  local julia="$1"
+  local version="$2"
+  # ...
+}
+```
 
 * Explicitly return error codes with `|| return $?`.
 * Keep branching logic to a minimum.
@@ -247,8 +296,8 @@ repository.**
 * Utility functions should go into `share/julia-install/julia-install.sh`.
 * Generic installation steps should go into `share/julia-install/functions.sh`.
 * Julia specific installation steps should go into
-  `share/julia-install/$julia/functions.sh` and may override the generic steps in
-  `share/julia-install/functions.sh`.
+  `share/julia-install/$julia/functions.sh` and may override the generic
+  steps in `share/julia-install/functions.sh`.
 * Julia build dependencies should go into
   `share/julia-install/$julia/dependencies.txt`.
 * All new code must have [shunit2] unit-tests.
@@ -258,9 +307,9 @@ repository.**
 * Options for Julia specific `./configure` options. You can pass additional
   configuration options like so:
 
-  ```bash
-  julia-install julia 2.0 -- --foo --bar
-  ```
+```bash
+julia-install julia 2.0 -- --foo --bar
+```
 
 * Excessive version or environment checks. This is the job of a `./configure`
   script.
@@ -303,7 +352,7 @@ The Change Log is [here](/changelog).
 [julia-build]: https://github.com/jlenv/julia-build#readme
 [Chef]: https://github.com/jlenv/jlenv-cookbook#readme
 
-[PGP]: http://en.wikipedia.org/wiki/Pretty_Good_Privacy
+[Signify]: http://en.wikipedia.org/wiki/Pretty_Good_Privacy
 [1]: http://jlenv.github.io/contact.html#pgp
 
 [homebrew]: http://brew.sh/

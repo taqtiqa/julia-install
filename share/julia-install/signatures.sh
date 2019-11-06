@@ -27,6 +27,7 @@ function compute_signature()
 
     case "$algorithm" in
         gpg)
+            setup_julia_public_key_gpg
             local output="$(verify_archive_signature_gpg)"
         ;;
         ed)
@@ -37,23 +38,24 @@ function compute_signature()
         ;;
     esac
 
-    echo -n "${output}"
+    echo "${output##*$'\n'}"
 }
 
 function verify_signature()
 {
     local file="$1"
     local algorithm="$2"
-    local expected_signature="$3"
+    local expected_signature='Julia archive VERIFIED.'
 
     if [[ -z "$expected_signature" ]]; then
         warn "No $algorithm signature for $file"
         return
     fi
 
-    local actual_signature="$(compute_signature "$algorithm" "${file}.asc" "$file")"
+    local actual_signature="$(compute_signature "$algorithm")"
 
-    if [[ "$actual_signature" != "$expected_signature" ]]; then
+    # Check the last line of output.
+    if [[ "${actual_signature##*$'\n'}" != "$expected_signature" ]]; then
         error "Invalid $algorithm signature for $file"
         error "  expected: $expected_signature"
         error "  actual:   $actual_signature"
