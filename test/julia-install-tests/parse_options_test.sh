@@ -150,16 +150,16 @@ function test_parse_options_with_gpg()
 	assertEquals "did not set \$julia_gpg" "$gpg" "$julia_gpg"
 }
 
-function test_parse_options_with_package_manager()
-{
-	local new_package_manager="dnf"
+# function test_parse_options_with_package_manager()
+# {
+# 	local new_package_manager="dnf"
 
-	set_package_manager "apt"
+# 	set_package_manager "apt"
 
-	parse_options "--package-manager" "$new_package_manager"
+# 	parse_options "--package-manager" "$new_package_manager"
 
-	assertEquals "did not set \$package_manager" "$new_package_manager" "$package_manager"
-}
+# 	assertEquals "did not set \$package_manager" "$new_package_manager" "$package_manager"
+# }
 
 function test_parse_options_with_no_download()
 {

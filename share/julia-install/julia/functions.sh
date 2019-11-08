@@ -1,17 +1,14 @@
 #!/usr/bin/env bash
 
 julia_version_family="${julia_version:0:3}"
-julia_archive="julia-$julia_version.tar.gz"
-julia_archive_sig="julia-$julia_version.tar.gz.asc"
-julia_full_archive="julia-$julia_version-full.tar.gz"
-julia_full_archive_sig="julia-$julia_version-full.tar.gz.asc"
+julia_archive="julia-$julia_version-full.tar.gz"
+julia_archive_sig="julia-$julia_version-full.tar.gz.asc"
 julia_dir_name="julia-$julia_version"
 julia_mirror="${julia_mirror:-https://github.com/JuliaLang/julia/releases/download}"
 julia_url="${julia_url:-$julia_mirror/v$julia_version/$julia_archive}"
 
 # https://github.com/JuliaLang/julia/releases/download/v1.3.0-rc4/julia-1.3.0-rc4-full.tar.gz
-# redirects to
-# AWS-S3 bucket
+# redirects to AWS-S3 bucket
 
 #
 # Configures Julia.

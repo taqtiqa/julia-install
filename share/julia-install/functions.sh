@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 
 . "${julia_install_dir}/signatures.sh"
+. "${julia_install_dir}/functions/detect_system.sh"
+
+# Propulates variables:
+#   _system_type_lowercase
+#   _system_name_lowercase
+#   _system_version_lowercase
+#   _system_arch_lowercase
+__ji_detect_system
 
 #
 # Pre-install tasks
@@ -17,10 +25,10 @@ function pre_install()
 function install_deps()
 {
 	local packages=($(fetch "$julia/dependencies" "$package_manager" || return $?))
-
+  
 	if (( ${#packages[@]} > 0 )); then
-		log "Installing dependencies for $julia $julia_version ..."
-		install_packages "${packages[@]}" || return $?
+		log "Installing dependencies for $julia $julia_version on ${_system_name} ${_system_version} (${_system_arch})..."
+		. "${julia_install_dir}/dependencies/${_system_name_lowercase}_${_system_version_lowercase}.sh" || return $?
 	fi
 
 	install_optional_deps || return $?

@@ -145,24 +145,12 @@ function parse_options()
 				shift 2
 				;;
 			-g|--gpg)
-				julia_gpg="$2"
-				shift 2
+				julia_gpg=1
+				shift
 				;;
-			--sha1)
-				julia_sha1="$2"
-				shift 2
-				;;
-			--sha256)
-				julia_sha256="$2"
-				shift 2
-				;;
-			--sha512)
-				julia_sha512="$2"
-				shift 2
-				;;
-			--package-manager)
-				set_package_manager "$2"
-				shift 2
+			--ed)
+				julia_ed=1
+				shift
 				;;
 			--no-download)
 				no_download=1

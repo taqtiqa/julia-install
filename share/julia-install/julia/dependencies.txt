@@ -1,4 +1,3 @@
-apt: build-essential libatomic1 python gfortran perl wget m4 cmake pkg-config
 dnf: gcc automake
 yum: gcc automake
 port: automake
