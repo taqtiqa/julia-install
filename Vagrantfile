@@ -557,22 +557,22 @@ SUDOERS_VARS
   SHELL
 end
 
-def windows_common(config, name)
-  config.vm.provision 'markerfile', type: 'shell', inline: <<-SHELL
-    $ErrorActionPreference = "Stop"
-    New-Item C:/is_vagrant_vm -ItemType file -Force | Out-Null
-  SHELL
+# def windows_common(config, name)
+#   config.vm.provision 'markerfile', type: 'shell', inline: <<-SHELL
+#     $ErrorActionPreference = "Stop"
+#     New-Item C:/is_vagrant_vm -ItemType file -Force | Out-Null
+#   SHELL
 
-  config.vm.provision 'set prompt', type: 'shell', inline: <<-SHELL
-    $ErrorActionPreference = "Stop"
-    $ps_prompt = 'function Prompt { "#{name}:$($ExecutionContext.SessionState.Path.CurrentLocation)>" }'
-    $ps_prompt | Out-File $PsHome/Microsoft.PowerShell_profile.ps1
-  SHELL
+#   config.vm.provision 'set prompt', type: 'shell', inline: <<-SHELL
+#     $ErrorActionPreference = "Stop"
+#     $ps_prompt = 'function Prompt { "#{name}:$($ExecutionContext.SessionState.Path.CurrentLocation)>" }'
+#     $ps_prompt | Out-File $PsHome/Microsoft.PowerShell_profile.ps1
+#   SHELL
 
-  config.vm.provision 'set env variables', type: 'shell', inline: <<-SHELL
-    $ErrorActionPreference = "Stop"
-    [Environment]::SetEnvironmentVariable("PACKAGING_ARCHIVES", "C:/project/build/packaging/archives", "Machine")
-    [Environment]::SetEnvironmentVariable("PACKAGING_TESTS", "C:/project/build/packaging/tests", "Machine")
-    [Environment]::SetEnvironmentVariable("JAVA_HOME", $null, "Machine")
-  SHELL
-end
+#   config.vm.provision 'set env variables', type: 'shell', inline: <<-SHELL
+#     $ErrorActionPreference = "Stop"
+#     [Environment]::SetEnvironmentVariable("PACKAGING_ARCHIVES", "C:/project/build/packaging/archives", "Machine")
+#     [Environment]::SetEnvironmentVariable("PACKAGING_TESTS", "C:/project/build/packaging/tests", "Machine")
+#     [Environment]::SetEnvironmentVariable("JAVA_HOME", $null, "Machine")
+#   SHELL
+# end
