@@ -93,11 +93,10 @@ __ji_detect_system_from_os_release()
   return 0
 }
 
-__ji_detect_system()
+function detect_system()
 {
   unset  _system_type _system_name _system_version _system_arch
-  export _system_type _system_name _system_version _system_arch
-
+  
   _system_info="$(command uname -a)"
   _system_type="unknown"
   _system_name="unknown"
@@ -271,17 +270,18 @@ __ji_detect_system()
       ;;
   esac
 
-  _system_type="${_system_type//[ \/]/_}"
-  _system_name="${_system_name//[ \/]/_}"
-  _system_version="${_system_version//[ \/]/_}"
-  _system_arch="${_system_arch//[ \/]/_}"
-  _system_arch="${_system_arch/amd64/x86_64}"
-  _system_arch="${_system_arch/i[123456789]86/i386}"
+  ji_system_type="${_system_type//[ \/]/_}"
+  ji_system_name="${_system_name//[ \/]/_}"
+  ji_system_version="${_system_version//[ \/]/_}"
+  ji_system_arch="${_system_arch//[ \/]/_}"
+  ji_system_arch="${ji_system_arch/amd64/x86_64}"
+  ji_system_arch="${ji_system_arch/i[123456789]86/i386}"
 
   # Convert to lowercase...
-  _system_type_lowercase="${_system_type,,}"
-  _system_name_lowercase="${_system_name,,}"
-  _system_version_lowercase="${_system_version,,}"
-  _system_arch_lowercase="${_system_arch,,}"
-
+  ji_system_type_lowercase="${_system_type,,}"
+  ji_system_name_lowercase="${_system_name,,}"
+  ji_system_version_lowercase="${_system_version,,}"
+  ji_system_arch_lowercase="${_system_arch,,}"
+  export ji_system_type ji_system_name ji_system_version ji_system_arch
+  export ji_system_type_lowercase ji_system_name_lowercase ji_system_version_lowercase ji_system_arch_lowercase
 }

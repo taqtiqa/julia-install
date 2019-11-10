@@ -1,5 +1,5 @@
 #!/usr/env/bin bash
-# Abundance of caution.
+# Abundance of caution:
 # Prevent Apt doing anything funky during a long build.
 systemctl stop apt-daily.timer;
 systemctl stop apt-daily-upgrade.timer;

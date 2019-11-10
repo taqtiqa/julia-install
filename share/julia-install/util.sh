@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source "${julia_install_dir}/package_manager.sh"
+# source "${julia_install_dir}/package_manager.sh"
 
 #
 # Auto-detect the downloader.

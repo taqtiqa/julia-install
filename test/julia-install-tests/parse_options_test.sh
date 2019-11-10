@@ -143,7 +143,7 @@ function test_parse_options_with_url()
 
 function test_parse_options_with_gpg()
 {
-	local gpg="julia-1.0.5.asc"
+	local gpg="1"
 
 	parse_options "--gpg" "$gpg" "julia"
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 . ./test/helper.sh
+. ./share/julia-install/util.sh
 
 URL="https://raw.github.com/jlenv/julia-install/master/README.md"
 OUTPUT="./test/download.txt"

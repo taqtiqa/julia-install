@@ -4,7 +4,7 @@ shopt -s extglob
 
 julia_install_version="0.1.0"
 julia_install_dir="${BASH_SOURCE[0]%/*}"
-julia_install_cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/julia-install"
+julia_install_cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}"
 
 julias=(julia)
 patches=()

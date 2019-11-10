@@ -5,6 +5,7 @@
 
 export HOME="$PWD/test/home"
 export PATH="$PWD/bin:$PATH"
+export XDG_CACHE_HOME="$HOME/.cache/julia-install/julia"
 
 mkdir -p "$HOME"
 

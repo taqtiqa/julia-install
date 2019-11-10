@@ -20,10 +20,12 @@ function test_julia_install_dir()
 function test_julia_install_cache_dir()
 {
 	if [[ -n "$XDG_CACHE_HOME" ]]; then
-		assertTrue "did not use \$XDG_CACHE_HOME/" \
-			   '[[ "$julia_install_cache_dir" == "$XDG_CACHE_HOME/"* ]]'
+		assertTrue "did use \$XDG_CACHE_HOME/ for tests" \
+			   '[[ "$julia_install_cache_dir" != "$XDG_CACHE_HOME/"* ]]'
+		assertTrue "did not use \$PWD/test/home/.cache for tests" \
+			   '[[ "$julia_install_cache_dir" == "$PWD/test/home/.cache/"* ]]'
 	else
-		assertTrue "did not use \$HOME/.cache/" \
+		assertTrue "did use \$HOME/.cache/" \
 			   '[[ "$julia_install_cache_dir" == "$HOME/.cache/"* ]]'
 	fi
 }

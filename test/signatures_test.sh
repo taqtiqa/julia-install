@@ -6,10 +6,11 @@ file="./test/factory/file.txt"
 
 gpg="file.txt.asc"
 
-signatures_gpg="./test/signatures.gpg"
+signatures_gpg="${julia_install_cache_dir}/${julia}/signatures.gpg"
 
 function oneTimeSetUp()
 {
+	mv "${julia_install_cache_dir}/${julia}/signatures.gpg" "${julia_install_cache_dir}/${julia}/signatures.gpg.bak"
 	cat <<EOS > "${signatures_gpg}"
 1  foo.txt
 9999  file.txt
@@ -60,8 +61,7 @@ function test_compute_signature_gpg()
 	julia_archive="hello-world.txt"
 	local expected='Julia archive VERIFIED.'
 	assertEquals "did not return the expected gpg checksum" \
-		     "$expected" \
-		     "$(compute_signature gpg)"
+		     "$expected" "$(compute_signature gpg)"
 }
 
 function test_compute_signature_with_missing_file()
@@ -83,6 +83,8 @@ function test_verify_signature_gpg()
 function oneTimeTearDown()
 {
 	rm "$signatures_gpg"
+  mv "${julia_install_cache_dir}/${julia}/signatures.gpg.bak" "${julia_install_cache_dir}/${julia}/signatures.gpg"
+
 }
 
 SHUNIT_PARENT=$0 . $SHUNIT2

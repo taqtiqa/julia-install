@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 . ./test/helper.sh
-. ./share/julia-install/util.sh
 
 function test_downloader_with_wget()
 {

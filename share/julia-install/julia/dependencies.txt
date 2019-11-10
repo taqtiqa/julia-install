@@ -1,7 +1,0 @@
-dnf: gcc automake
-yum: gcc automake
-port: automake
-brew: automake
-pacman: gcc make
-zypper: gcc make
-pkg: gcc

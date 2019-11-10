@@ -54,8 +54,8 @@ function verify_archive_signature_gpg(){
 #
 function setup_julia_public_key_gpg()
 {
-  echo $julia_install_cache_dir
-  echo $src_dir
+  #echo $julia_install_cache_dir
+  #echo $src_dir
 
   rm -rf "${src_dir}/.gnupg"
   mkdir -m 0700 "${src_dir}/.gnupg"

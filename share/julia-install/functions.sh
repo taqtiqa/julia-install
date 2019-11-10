@@ -8,7 +8,7 @@
 #   _system_name_lowercase
 #   _system_version_lowercase
 #   _system_arch_lowercase
-__ji_detect_system
+detect_system
 
 #
 # Pre-install tasks
@@ -24,11 +24,13 @@ function pre_install()
 #
 function install_deps()
 {
-	local packages=($(fetch "$julia/dependencies" "$package_manager" || return $?))
-  
-	if (( ${#packages[@]} > 0 )); then
+	if [ -f  "${julia_install_dir}/${_system_name_lowercase}/setup.sh" ]; then
+		log "Installing dependencies for $julia $julia_version on ${_system_name} (${_system_arch})..."
+		. "${julia_install_dir}/julia/os/${_system_name_lowercase}/setup.sh" || return $?
+	fi
+	if [ -f  "${julia_install_dir}/${_system_name_lowercase}/${_system_version_lowercase}/setup.sh" ]; then
 		log "Installing dependencies for $julia $julia_version on ${_system_name} ${_system_version} (${_system_arch})..."
-		. "${julia_install_dir}/dependencies/${_system_name_lowercase}_${_system_version_lowercase}.sh" || return $?
+		. "${julia_install_dir}/julia/os/${_system_name_lowercase}/${_system_version_lowercase}/setup.sh" || return $?
 	fi
 
 	install_optional_deps || return $?
