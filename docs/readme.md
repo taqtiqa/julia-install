@@ -176,11 +176,21 @@ julia-install --install-dir ~/.jlenv/julias/1.0.4 julia 1.0.4
 
 ## Install
 
+From archive:
 ```bash
-wget -O julia-install-0.1.0.tar.gz https://github.com/jlenv/julia-install/archive/v0.1.0.tar.gz
-tar -xzvf julia-install-0.1.0.tar.gz
-cd julia-install-0.1.0/
-sudo make install
+ver=0.2.0
+wget -O julia-install-${ver}.tar.gz https://github.com/jlenv/julia-install/archive/v${ver}.tar.gz
+tar -xzvf julia-install-${ver}.tar.gz
+cd julia-install-${ver}/
+make install
+```
+
+From Git sources:
+
+```bash
+git clone --depth=1 https://github.com/jlenv/julia-install
+cd julia-install/
+make install
 ```
 
 ### Signify

@@ -21,16 +21,17 @@
 # specific language governing permissions and limitations
 # under the License.
 
-# Ensure we do not start any VM automatically.
 define_opts = {
   autostart: false
 }.freeze
 
 Vagrant.configure(2) do |config|
+
   config.vm.provider :digital_ocean do |provider, override|
-    # provider.image  = 'ubuntu-16-04-x64' # vagrant digitalocean-list images $DIGITAL_OCEAN_TOKEN
-    provider.region = 'nyc3'             # vagrant digitalocean-list regions $DIGITAL_OCEAN_TOKEN
-    provider.size   = 's-2vcpu-4gb'      # vagrant digitalocean-list sizes $DIGITAL_OCEAN_TOKEN
+
+    provider.image  = 'ubuntu-16-04-x64' # vagrant digitalocean-list images $DIGITALOCEAN_TOKEN
+    provider.region = 'nyc3'             # vagrant digitalocean-list regions $DIGITALOCEAN_TOKEN
+    provider.size   = 's-2vcpu-4gb'      # vagrant digitalocean-list sizes $DIGITALOCEAN_TOKEN
 
     provider.token        = ENV['DIGITAL_OCEAN_TOKEN']
     provider.ssh_key_name = ENV['DIGITAL_OCEAN_SSH_KEY_NAME']
@@ -42,10 +43,10 @@ Vagrant.configure(2) do |config|
     provider.ca_path = "/usr/local/opt/curl-ca-bundle/share/ca-bundle.crt"
   end
 
-   config.vm.provider 'virtualbox' do |vbox|
+  config.vm.provider 'virtualbox' do |vbox|
     # Give the box more memory and cpu because our tests are beasts!
-    vbox.memory = Integer(ENV['VAGRANT_MEMORY'] || 8192)
-    vbox.cpus = Integer(ENV['VAGRANT_CPUS'] || 4)
+    vbox.memory = Integer(ENV['VAGRANT_MEMORY'] || 3072)
+    vbox.cpus = Integer(ENV['VAGRANT_CPUS'] || 2)
 
     # see https://github.com/hashicorp/vagrant/issues/9524
     vbox.customize ["modifyvm", :id, "--audio", "none"]
@@ -54,34 +55,55 @@ Vagrant.configure(2) do |config|
   # Switch the default share for the project root from /vagrant to
   # /elasticsearch because /vagrant is confusing when there is a project inside
   # the elasticsearch project called vagrant....
+  config.vm.synced_folder '.', '/vagrant', disabled: true, type: 'rsync'
+  config.vm.synced_folder '.', '/julia-install',  type: 'rsync',
+                                                  create: true,
+                                                  owner: 'root',
+                                                  rsync__exclude: '.git/',
+                                                  rsync_auto: true
+  # TODO: make these syncs work for windows!!!
+  # config.vm.synced_folder "#{Dir.home}/.vagrant/gradle/caches/jars-3", "/root/.gradle/caches/jars-3",
+  #     create: true,
+  #     owner: "vagrant"
+  # config.vm.synced_folder "#{Dir.home}/.vagrant/gradle/caches/modules-2", "/root/.gradle/caches/modules-2",
+  #     create: true,
+  #     owner: "vagrant"
+  # config.vm.synced_folder "#{Dir.home}/.gradle/wrapper", "/root/.gradle/wrapper",
+  #     create: true,
+  #     owner: "vagrant"
+
   # Expose project directory. Note that VAGRANT_CWD may not be the same as Dir.pwd
-  config.vm.synced_folder '.', '/vagrant', disabled: true
-  PRJCT_DIR = ENV['VAGRANT_PROJECT_DIR'] || Dir.pwd
-  config.vm.synced_folder PRJCT_DIR, '/julia-install',  type: 'rsync',
-                                                        create: true,
-                                                        owner: 'root',
-                                                        rsync__exclude: '.git/',
-                                                        rsync__auto: true
+  PROJECT_DIR = ENV['VAGRANT_PROJECT_DIR'] || Dir.pwd
+  config.vm.synced_folder PROJECT_DIR, '/project'
+
+  # Digitial Ocean: -do
   'ubuntu-1604-do'.tap do |box|
     config.vm.define box, define_opts do |config|
-      # Running in the background switch these
-      config.trigger.after(:up) { |t| t.run = {inline: "bash -c 'vagrant rsync-auto #{box} &'"} }
-      config.vm.provider(:digital_ocean) { |p| p.image = 'ubuntu-16-04-x64' }
       deb_common config, box, extra: <<-SHELL
-        # root tty fix
-        echo uname -a
+        # Install common early bootstrap-install requirements.
+        echo 'No boostrap install requirements.'
       SHELL
-      # ubuntu_docker config
+      #ubuntu_docker config
+    end
+  end
+  'ubuntu-1404'.tap do |box|
+    config.vm.define box, define_opts do |config|
+      config.vm.box = 'elastic/ubuntu-16.04-x86_64'
+      deb_common config, box, extra: <<-SHELL
+        # Install common early bootstrap-install requirements.
+        echo 'No boostrap install requirements.'
+      SHELL
+      #ubuntu_docker config
     end
   end
   'ubuntu-1604'.tap do |box|
     config.vm.define box, define_opts do |config|
       config.vm.box = 'elastic/ubuntu-16.04-x86_64'
       deb_common config, box, extra: <<-SHELL
-        # Install Jayatana so we can work around it being present.
-        [ -f /usr/share/java/jayatanaag.jar ] || install jayatana
+        # Install common early bootstrap-install requirements.
+        echo 'No boostrap install requirements.'
       SHELL
-      # ubuntu_docker config
+      #ubuntu_docker config
     end
   end
   'ubuntu-1804'.tap do |box|
@@ -91,7 +113,7 @@ Vagrant.configure(2) do |config|
        # Install Jayatana so we can work around it being present.
        [ -f /usr/share/java/jayatanaag.jar ] || install jayatana
       SHELL
-      # ubuntu_docker config
+      ubuntu_docker config
     end
   end
   'debian-8'.tap do |box|
@@ -107,7 +129,14 @@ Vagrant.configure(2) do |config|
     config.vm.define box, define_opts do |config|
       config.vm.box = 'elastic/debian-9-x86_64'
       deb_common config, box
-      # deb_docker config
+      deb_docker config
+    end
+  end
+  'debian-10'.tap do |box|
+    config.vm.define box, define_opts do |config|
+      config.vm.box = 'elastic/debian-9-x86_64'
+      deb_common config, box
+      deb_docker config
     end
   end
   'centos-6'.tap do |box|
@@ -120,7 +149,14 @@ Vagrant.configure(2) do |config|
     config.vm.define box, define_opts do |config|
       config.vm.box = 'elastic/centos-7-x86_64'
       rpm_common config, box
-      # rpm_docker config
+      rpm_docker config
+    end
+  end
+  'centos-8'.tap do |box|
+    config.vm.define box, define_opts do |config|
+      config.vm.box = 'elastic/centos-7-x86_64'
+      rpm_common config, box
+      rpm_docker config
     end
   end
   'oel-6'.tap do |box|
@@ -135,21 +171,13 @@ Vagrant.configure(2) do |config|
       rpm_common config, box
     end
   end
-  'fedora-28'.tap do |box|
+  'oel-8'.tap do |box|
     config.vm.define box, define_opts do |config|
-      config.vm.box = 'elastic/fedora-28-x86_64'
-      dnf_common config, box
-      # dnf_docker config
+      config.vm.box = 'elastic/oraclelinux-7-x86_64'
+      rpm_common config, box
     end
   end
-  'fedora-29'.tap do |box|
-    config.vm.define box, define_opts do |config|
-      config.vm.box = 'elastic/fedora-29-x86_64'
-      dnf_common config, box
-      # dnf_docker config
-    end
-  end
-  'opensuse-42'.tap do |box|
+  'sles-11'.tap do |box|
     config.vm.define box, define_opts do |config|
       config.vm.box = 'elastic/opensuse-42-x86_64'
       suse_common config, box
@@ -161,6 +189,22 @@ Vagrant.configure(2) do |config|
       sles_common config, box
     end
   end
+  'sles-15'.tap do |box|
+    config.vm.define box, define_opts do |config|
+      config.vm.box = 'elastic/sles-12-x86_64'
+      sles_common config, box
+    end
+  end
+  'rhel-6'.tap do |box|
+    config.vm.define box, define_opts do |config|
+      config.vm.box = 'elastic/rhel-8-x86_64'
+      rpm_common config, box
+    end
+  'rhel-7'.tap do |box|
+    config.vm.define box, define_opts do |config|
+      config.vm.box = 'elastic/rhel-8-x86_64'
+      rpm_common config, box
+    end
   'rhel-8'.tap do |box|
     config.vm.define box, define_opts do |config|
       config.vm.box = 'elastic/rhel-8-x86_64'
@@ -204,7 +248,55 @@ def deb_common(config, name, extra: '')
     name,
     update_command: 'apt-get update',
     update_tracking_file: '/var/cache/apt/archives/last_update',
-    install_command: 'apt-get install --yes',
+    install_command: 'apt-get install -y',
+    extra: extra_with_lintian
+  )
+end
+
+def deb_docker(config)
+  config.vm.provision 'install Docker using apt', type: 'shell', inline: <<-SHELL
+    # Install packages to allow apt to use a repository over HTTPS
+    apt-get install -y \
+      apt-transport-https \
+      ca-certificates \
+      curl \
+      gnupg2 \
+      software-properties-common
+
+    # Add Docker’s official GPG key
+    curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+
+    # Set up the stable Docker repository
+    add-apt-repository \
+      "deb [arch=amd64] https://download.docker.com/linux/debian \
+      $(lsb_release -cs) \
+      stable"
+
+    # Install Docker. Unlike Fedora and CentOS, this also start the daemon.
+    apt-get update
+    apt-get install -y docker-ce docker-ce-cli containerd.io
+
+    # Add vagrant to the Docker group, so that it can run commands
+    usermod -aG docker vagrant
+  SHELL
+end
+
+def ubuntu_common(config, name, extra: '')
+  # http://foo-o-rama.com/vagrant--stdin-is-not-a-tty--fix.html
+  config.vm.provision 'fix-no-tty', type: 'shell' do |s|
+    s.privileged = false
+    s.inline = "sudo sed -i '/tty/!s/mesg n/tty -s \\&\\& mesg n/' /root/.profile"
+  end
+  extra_with_lintian = <<-SHELL
+    #{extra}
+    install lintian
+  SHELL
+  linux_common(
+    config,
+    name,
+    update_command: 'apt-get update',
+    update_tracking_file: '/var/cache/apt/archives/last_update',
+    install_command: 'apt-get install -y',
     extra: extra_with_lintian
   )
 end
@@ -238,34 +330,6 @@ def ubuntu_docker(config)
     # Enable IPv4 forwarding
     sed -i '/net.ipv4.ip_forward/s/^#//' /etc/sysctl.conf
     systemctl restart networking
-  SHELL
-end
-
-def deb_docker(config)
-  config.vm.provision 'install Docker using apt', type: 'shell', inline: <<-SHELL
-    # Install packages to allow apt to use a repository over HTTPS
-    apt-get install -y \
-      apt-transport-https \
-      ca-certificates \
-      curl \
-      gnupg2 \
-      software-properties-common
-
-    # Add Docker’s official GPG key
-    curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
-
-    # Set up the stable Docker repository
-    add-apt-repository \
-      "deb [arch=amd64] https://download.docker.com/linux/debian \
-      $(lsb_release -cs) \
-      stable"
-
-    # Install Docker. Unlike Fedora and CentOS, this also start the daemon.
-    apt-get update
-    apt-get install -y docker-ce docker-ce-cli containerd.io
-
-    # Add vagrant to the Docker group, so that it can run commands
-    usermod -aG docker vagrant
   SHELL
 end
 
@@ -346,7 +410,6 @@ end
 
 def sles_common(config, name)
   extra = <<-SHELL
-    zypper rr systemsmanagement_puppet puppetlabs-pc1
     zypper --non-interactive install git-core
   SHELL
   suse_common config, name, extra: extra
@@ -387,17 +450,15 @@ def linux_common(config,
     touch /etc/is_vagrant_vm
     touch /is_vagrant_vm # for consistency between linux and windows
   SHELL
-
   # This prevents leftovers from previous tests using the
   # same VM from messing up the current test
-  config.vm.provision 'clean all artifacts from tmp', type: 'shell', inline: <<-SHELL
+  config.vm.provision 'clean installs in tmp', type: 'shell', inline: <<-SHELL
     rm -rf /tmp/*
   SHELL
 
-  # Test build and install of the latest minor update
-  config.vm.provision 'Julia install', type: 'shell', inline: <<-SHELL
+  config.vm.provision 'julia-install', type: 'shell', inline: <<-SHELL
     cd /julia-install
-      bin/julia-install julia 1.0
+    make install
   SHELL
 
   sh_set_prompt config, name
@@ -416,19 +477,14 @@ end
 # them by re-source-ing the standard prompt file.
 def sh_set_prompt(config, name)
   config.vm.provision 'set prompt', type: 'shell', inline: <<-SHELL
-      cat \<\<PROMPT > /etc/profile.d/elasticsearch_prompt.sh
-export PS1='#{name}:\\w$ '
-PROMPT
-      grep 'source /etc/profile.d/elasticsearch_prompt.sh' ~/.bashrc |
+      cat \<\<PROMPT > /etc/profile.d/julia-install_prompt.sh
+  export PS1='#{name}:\\w$ '
+  PROMPT
+      grep 'source /etc/profile.d/julia-install_prompt.sh' ~/.bashrc |
         cat \<\<SOURCE_PROMPT >> ~/.bashrc
-# Replace the standard prompt with a consistent one
-source /etc/profile.d/elasticsearch_prompt.sh
-SOURCE_PROMPT
-      grep 'source /etc/profile.d/elasticsearch_prompt.sh' ~/vagrant/.bashrc |
-        cat \<\<SOURCE_PROMPT >> ~/vagrant/.bashrc
-# Replace the standard prompt with a consistent one
-source /etc/profile.d/elasticsearch_prompt.sh
-SOURCE_PROMPT
+  # Replace the standard prompt with a consistent one
+  source /etc/profile.d/julia-install_prompt.sh
+  SOURCE_PROMPT
   SHELL
 end
 
@@ -438,8 +494,9 @@ def sh_install_deps(config,
                     install_command,
                     install_command_retries,
                     extra)
-  config.vm.provision 'install dependencies', type: 'shell', inline:  <<-SHELL
-    set -e
+  config.vm.provision 'install dependencies', 
+                      type: 'shell', inline: <<~SHELL
+    set -o errexit
     set -o pipefail
 
     # Retry install command up to $2 times, if failed
@@ -463,14 +520,14 @@ def sh_install_deps(config,
     }
 
     install() {
-      # Only apt-get update if we haven't in the last day
-      if [ ! -f #{update_tracking_file} ] || [ "x$(find #{update_tracking_file} -mtime +0)" == "x#{update_tracking_file}" ]; then
+      # Only update if we haven't in the last day
+      if [ ! -f "#{update_tracking_file}" ] || [ "x$(find #{update_tracking_file} -mtime +0)" == "x#{update_tracking_file}" ]; then
         echo "==> Updating repository"
         #{update_command} || true
-        touch #{update_tracking_file}
+        touch "#{update_tracking_file}"
       fi
       echo "==> Installing $1"
-      if [ #{install_command_retries} -eq 0 ]
+      if [ "#{install_command_retries}" -eq 0 ]
       then
         #{install_command} $1
       else
@@ -488,6 +545,7 @@ def sh_install_deps(config,
     ensure curl
     ensure unzip
     ensure rsync
+    ensure make
 
     installed bats || {
       # Bats lives in a git repository....
@@ -499,44 +557,23 @@ def sh_install_deps(config,
       rm -rf /tmp/bats
     }
 
-    cat \<\<VARS > /etc/profile.d/elasticsearch_vars.sh
-export ZIP=/elasticsearch/distribution/zip/build/distributions
-export TAR=/elasticsearch/distribution/tar/build/distributions
-export RPM=/elasticsearch/distribution/rpm/build/distributions
-export DEB=/elasticsearch/distribution/deb/build/distributions
-export PACKAGING_TESTS=/project/build/packaging/tests
-VARS
-    cat \<\<SUDOERS_VARS > /etc/sudoers.d/elasticsearch_vars
-Defaults   env_keep += "ZIP"
-Defaults   env_keep += "TAR"
-Defaults   env_keep += "RPM"
-Defaults   env_keep += "DEB"
-Defaults   env_keep += "PACKAGING_ARCHIVES"
-Defaults   env_keep += "PACKAGING_TESTS"
-Defaults   env_keep += "BATS_UTILS"
-Defaults   env_keep += "BATS_TESTS"
-Defaults   env_keep += "JAVA_HOME"
-SUDOERS_VARS
-    chmod 0440 /etc/sudoers.d/elasticsearch_vars
-  SHELL
-end
-
-def windows_common(config, name)
-  config.vm.provision 'markerfile', type: 'shell', inline: <<-SHELL
-    $ErrorActionPreference = "Stop"
-    New-Item C:/is_vagrant_vm -ItemType file -Force | Out-Null
-  SHELL
-
-  config.vm.provision 'set prompt', type: 'shell', inline: <<-SHELL
-    $ErrorActionPreference = "Stop"
-    $ps_prompt = 'function Prompt { "#{name}:$($ExecutionContext.SessionState.Path.CurrentLocation)>" }'
-    $ps_prompt | Out-File $PsHome/Microsoft.PowerShell_profile.ps1
-  SHELL
-
-  config.vm.provision 'set env variables', type: 'shell', inline: <<-SHELL
-    $ErrorActionPreference = "Stop"
-    [Environment]::SetEnvironmentVariable("PACKAGING_ARCHIVES", "C:/project/build/packaging/archives", "Machine")
-    [Environment]::SetEnvironmentVariable("PACKAGING_TESTS", "C:/project/build/packaging/tests", "Machine")
-    [Environment]::SetEnvironmentVariable("JAVA_HOME", $null, "Machine")
+    cat \<\<VARS > /etc/profile.d/julia-install_vars.sh
+    export ZIP=/julia-install/distribution/zip/build/distributions
+    export TAR=/julia-install/distribution/tar/build/distributions
+    export RPM=/julia-install/distribution/rpm/build/distributions
+    export DEB=/julia-install/distribution/deb/build/distributions
+    export PACKAGING_TESTS=/project/build/packaging/tests
+    VARS
+        cat \<\<SUDOERS_VARS > /etc/sudoers.d/julia-install_vars
+    Defaults   env_keep += "ZIP"
+    Defaults   env_keep += "TAR"
+    Defaults   env_keep += "RPM"
+    Defaults   env_keep += "DEB"
+    Defaults   env_keep += "PACKAGING_ARCHIVES"
+    Defaults   env_keep += "PACKAGING_TESTS"
+    Defaults   env_keep += "BATS_UTILS"
+    Defaults   env_keep += "BATS_TESTS"
+    SUDOERS_VARS
+    chmod 0440 /etc/sudoers.d/julia-install_vars
   SHELL
 end

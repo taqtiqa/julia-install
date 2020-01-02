@@ -24,6 +24,7 @@ function test_download_patches()
 function tearDown()
 {
 	rm -r "$src_dir/$julia_dir_name"
+	return
 }
 
 SHUNIT_PARENT=$0 . $SHUNIT2

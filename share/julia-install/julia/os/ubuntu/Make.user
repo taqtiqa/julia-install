@@ -1,0 +1,5 @@
+SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+CPUS ?= $(shell nproc || echo 2)
+
+MAKEFLAGS += --jobs=$(CPUS)
+MARCH=native

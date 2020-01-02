@@ -5,7 +5,7 @@
 __ji_db_system()
 {
   \typeset __key __message
-  for __key in "${_system_name}_${_system_version}_$1" "${_system_name}_$1" "$1"
+  for __key in "${ji_system_name}_${ji_system_version}_$1" "${ji_system_name}_$1" "$1"
   do
     if __ji_db "${__key}_error" __message
     then ji_error "${__message}"

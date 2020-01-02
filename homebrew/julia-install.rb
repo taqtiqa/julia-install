@@ -1,7 +1,7 @@
 class JuliaInstall < Formula
   desc "Install Julia"
   homepage "https://github.com/jlenv/julia-install#readme"
-  url "https://github.com/jlenv/julia-install/archive/v0.1.0.tar.gz"
+  url "https://github.com/jlenv/julia-install/archive/v0.2.0.tar.gz"
   sha256 "500a8ac84b8f65455958a02bcefd1ed4bfcaeaa2bb97b8f31e61ded5cd0fd70b"
   head "https://github.com/jlenv/julia-install.git"
 

@@ -9,7 +9,7 @@ Please see the full [documentation](https://jlenv.github.io/julia-install).
 
 ## Features
 
-* Supports installing arbitrary versions.
+* Supports installing arbitrary versions of [Julia].
 * Supports downloading the latest versions from [julia-versions] or .
 * Supports verifying GPG signatures of Julia source archives.
 * Supports `chjulia` and the `jlenv` plugin `jlenv-chjl`.

@@ -17,6 +17,8 @@ fi
 
 init || exit $?
 
+build_datetime || fail 'Setting build timestamp failed!'
+
 if [[ $no_reinstall -eq 1 ]] && [[ -x "$install_dir/bin/julia" ]]; then
 	log "Julia is already installed into $install_dir"
 	exit

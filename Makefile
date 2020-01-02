@@ -1,7 +1,7 @@
 SHELL=/usr/bin/env bash
 NAME=julia-install
 VERSION=0.2.0
-AUTHOR=taqtiqa-mark
+AUTHOR=taqtiqa
 URL=https://github.com/$(AUTHOR)/$(NAME)
 
 ifeq ($(OS),Windows_NT)
@@ -23,7 +23,7 @@ PKG=$(PKG_DIR)/$(PKG_NAME).tar.gz
 SIG=$(PKG_DIR)/$(PKG_NAME).asc
 
 PREFIX?=$(HOME)/.local
-SHARE_DIR=$(PREFIX)/share
+SHARE_DIR=$(PREFIX)/share/julia-install
 DOC_DIR=$(SHARE_DIR)/doc/$(PKG_NAME)
 
 all:
@@ -82,7 +82,6 @@ install:
 
 uninstall:
 	for file in $(INSTALL_FILES); do rm -f $(DESTDIR)$(PREFIX)/$$file; done
-	rm -rf $(DESTDIR)$(DOC_DIR)
-	rmdir $(DESTDIR)$(SHARE_DIR)
-
+	for dir in $(INSTALL_DIRS); do rm -rf $(DESTDIR)$(PREFIX)/$$dir; done
+	
 .PHONY: build man download sign verify clean check test tag release rpm install uninstall all

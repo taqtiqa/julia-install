@@ -47,26 +47,22 @@ Options:
 	-p, --patch FILE	Patch to apply to the Julia source-code
 	-M, --mirror URL	Alternate mirror to download the Julia archive from
 	-u, --url URL		Alternate URL to download the Julia archive from
-	-m, --md5 MD5		MD5 checksum of the Julia archive
-	    --sha1 SHA1		SHA1 checksum of the Julia archive
-	    --sha256 SHA256	SHA256 checksum of the Julia archive
-	    --sha512 SHA512	SHA512 checksum of the Julia archive
-	--package-manager [apt|dnf|yum|pacman|zypper|brew|pkg|port]
-				Use an alternative package manager
+	-g, --gpg		Verify GPG signature of the Julia archive
+	-e  --ed		Verify Minisign/Signify signature of the Julia archive
 	--no-download		Use the previously downloaded Julia archive
 	--no-verify		Do not verify the downloaded Julia archive
 	--no-extract		Do not re-extract the downloaded Julia archive
 	--no-install-deps	Do not install build dependencies before installing Julia
 	--no-reinstall  	Skip installation if another Julia is detected in same location
-	-L, --latest		Downloads the latest julia versions and checksums
+	-L, --latest		Downloads the latest julia versions and signatures
 	-V, --version		Prints the version
 	-h, --help		Prints this message
 
 Examples:
 
 	$ julia-install julia
-	$ julia-install julia 2.3
-	$ julia-install julia 2.3.0
+	$ julia-install julia 1.0
+	$ julia-install julia 1.0.4
 	$ julia-install julia -- --with-openssl-dir=...
 	$ julia-install -M https://ftp.julialang.org/pub/julia julia
 	$ julia-install -M http://www.mirrorservice.org/sites/ftp.julialang.org/pub/julia julia

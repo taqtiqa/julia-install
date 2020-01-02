@@ -24,13 +24,13 @@ function pre_install()
 #
 function install_deps()
 {
-	if [ -f  "${julia_install_dir}/${_system_name_lowercase}/setup.sh" ]; then
-		log "Installing dependencies for $julia $julia_version on ${_system_name} (${_system_arch})..."
-		. "${julia_install_dir}/julia/os/${_system_name_lowercase}/setup.sh" || return $?
+	if [ -f  "${julia_install_dir}/julia/os/${ji_system_name_lowercase}/setup.sh" ]; then
+		log "Installing dependencies for $julia $julia_version on ${ji_system_name} (${ji_system_arch})..."
+		. "${julia_install_dir}/julia/os/${ji_system_name_lowercase}/setup.sh" || return $?
 	fi
-	if [ -f  "${julia_install_dir}/${_system_name_lowercase}/${_system_version_lowercase}/setup.sh" ]; then
-		log "Installing dependencies for $julia $julia_version on ${_system_name} ${_system_version} (${_system_arch})..."
-		. "${julia_install_dir}/julia/os/${_system_name_lowercase}/${_system_version_lowercase}/setup.sh" || return $?
+	if [ -f  "${julia_install_dir}/julia/os/${ji_system_name_lowercase}/${ji_system_version_lowercase}/setup.sh" ]; then
+		log "Installing dependencies for $julia $julia_version on ${ji_system_name} ${ji_system_version} (${ji_system_arch})..."
+		. "${julia_install_dir}/julia/os/${ji_system_name_lowercase}/${ji_system_version_lowercase}/setup.sh" || return $?
 	fi
 
 	install_optional_deps || return $?
@@ -107,6 +107,12 @@ function apply_patches()
 	done
 }
 
+#
+# Return date timestamp for the build.
+#
+function build_datetime() {
+	ji_build_datetime=${ji_build_datetime:-$(date -u +"%Y-%m-%dT%H:%M:%SZ")}
+ }
 #
 # Place holder function for configuring Julia.
 #

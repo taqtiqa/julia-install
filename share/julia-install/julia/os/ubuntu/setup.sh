@@ -26,6 +26,7 @@ apt-get --assume-yes purge unattended-upgrades;
 
 echo `ps faux | grep [a]pt`
 
+apt-get update
 opts='--assume-yes --fix-missing --quiet --auto-remove'
 pkgs='build-essential cmake gfortran libatomic1 m4 perl pkg-config python wget'
 ${sudo} apt-get install ${opts} ${pkgs}
