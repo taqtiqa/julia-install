@@ -7,9 +7,6 @@ julia_dir_name="julia-$julia_version"
 julia_mirror="${julia_mirror:-https://github.com/JuliaLang/julia/releases/download}"
 julia_url="${julia_url:-$julia_mirror/v$julia_version/$julia_archive}"
 
-# https://github.com/JuliaLang/julia/releases/download/v1.3.0-rc4/julia-1.3.0-rc4-full.tar.gz
-# redirects to AWS-S3 bucket
-
 #
 # Configures Julia.
 #
@@ -20,9 +17,9 @@ julia_url="${julia_url:-$julia_mirror/v$julia_version/$julia_archive}"
 
 function configure_julia()
 { 
-	log "Configuring ${julia} ${julia_version} in ${src_dir}/${julia_dir_name}/ ..."
-	local systm_vrsn_mk="${julia_install_dir}/${julia}/os/${system_name_lowercase}/${system_version_lowercase}/Make.user"
-	local systm_nm_mk="${julia_install_dir}/${julia}/os/${system_name_lowercase}/Make.user"
+	log "Configuring ${julia} ${julia_version} in ${src_dir}/${julia_dir_name}/ for install folder ${julia_install_dir} ..."
+	local systm_vrsn_mk="${julia_install_dir}/${julia}/os/${ji_system_name_lowercase}/${ji_system_version_lowercase}/Make.user"
+	local systm_nm_mk="${julia_install_dir}/${julia}/os/${ji_system_name_lowercase}/Make.user"
 	# Note: the system-version Make.user should include the system-name Make.user
 	if [ -f "${systm_vrsn_mk}" ] 
 	then
@@ -32,7 +29,7 @@ function configure_julia()
 	  # When no system-version Make.user, copy system-name Make.user file if exists
 	  cp --force "${systm_nm_mk}" "${src_dir}/${julia_dir_name}/"
 	else
-	  echo "No Make.user file available for ${system_name:-name_not_set} version ${system_version:-version_not_set}.  Continuing."
+	  echo "No Make.user file available for ${ji_system_name:-name_not_set} version ${ji_system_version:-version_not_set}.  Continuing."
   fi
 }
 

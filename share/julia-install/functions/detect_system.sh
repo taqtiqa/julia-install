@@ -282,6 +282,13 @@ function detect_system()
   ji_system_name_lowercase="${_system_name,,}"
   ji_system_version_lowercase="${_system_version,,}"
   ji_system_arch_lowercase="${_system_arch,,}"
+  
+  log "Detected system:"
+  log "    ji_system_type=${ji_system_type}"
+  log "    ji_system_name=${ji_system_name}"
+  log "    ji_system_version=${ji_system_version}"
+  log "    ji_system_arch=${ji_system_arch}"  
+
   export ji_system_type ji_system_name ji_system_version ji_system_arch
   export ji_system_type_lowercase ji_system_name_lowercase ji_system_version_lowercase ji_system_arch_lowercase
 }
