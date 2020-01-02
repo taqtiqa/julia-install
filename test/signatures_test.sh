@@ -6,11 +6,14 @@ file="./test/factory/file.txt"
 
 gpg="file.txt.asc"
 
-signatures_gpg="${julia_install_cache_dir}/${julia}/signatures.gpg"
+signatures_gpg="${julia_install_cache_dir}/signatures.gpg"
 
 function oneTimeSetUp()
 {
-	mv "${julia_install_cache_dir}/${julia}/signatures.gpg" "${julia_install_cache_dir}/${julia}/signatures.gpg.bak"
+	if [ -r "${julia_install_cache_dir}/signatures.gpg" ]
+	then
+    mv "${julia_install_cache_dir}/signatures.gpg" "${julia_install_cache_dir}/signatures.gpg.bak"
+	fi
 	cat <<EOS > "${signatures_gpg}"
 1  foo.txt
 9999  file.txt
@@ -67,7 +70,7 @@ function test_compute_signature_gpg()
 function test_compute_signature_with_missing_file()
 {
 	julia_archive="missing.txt"
-	assertEquals "returned data when it should not have" \
+	assertEquals "returned incorrect data" \
 		     "Julia archive NOT verified." \
 		     "$(compute_signature gpg 2>/dev/null)"
 }
@@ -83,8 +86,10 @@ function test_verify_signature_gpg()
 function oneTimeTearDown()
 {
 	rm "$signatures_gpg"
-  mv "${julia_install_cache_dir}/${julia}/signatures.gpg.bak" "${julia_install_cache_dir}/${julia}/signatures.gpg"
-
+	if [ -r "${julia_install_cache_dir}/signatures.gpg.bak" ]
+	then
+    mv "${julia_install_cache_dir}/signatures.gpg.bak" "${julia_install_cache_dir}/signatures.gpg"
+  fi
 }
 
 SHUNIT_PARENT=$0 . $SHUNIT2

@@ -16,12 +16,12 @@ julia_url="${julia_url:-$julia_mirror/v$julia_version/$julia_archive}"
 	#make configure  || return $?
 
 function configure_julia()
-{ 
+{
 	log "Configuring ${julia} ${julia_version} in ${src_dir}/${julia_dir_name}/ for install folder ${julia_install_dir} ..."
 	local systm_vrsn_mk="${julia_install_dir}/${julia}/os/${ji_system_name_lowercase}/${ji_system_version_lowercase}/Make.user"
 	local systm_nm_mk="${julia_install_dir}/${julia}/os/${ji_system_name_lowercase}/Make.user"
 	# Note: the system-version Make.user should include the system-name Make.user
-	if [ -f "${systm_vrsn_mk}" ] 
+	if [ -f "${systm_vrsn_mk}" ]
 	then
     cp --force "${systm_vrsn_mk}" "${src_dir}/${julia_dir_name}/"
 	elif [ -f "${systm_nm_mk}" ]

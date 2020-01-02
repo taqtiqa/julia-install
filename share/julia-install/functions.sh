@@ -56,9 +56,9 @@ function download_julia()
 #
 function verify_julia()
 {
-	log "Verifying $julia_archive ..."
-
 	local file="$src_dir/$julia_archive"
+
+	log "Verifying $file ..."
 
 	verify_signature "$file" gpg || return $?
 }

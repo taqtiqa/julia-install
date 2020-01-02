@@ -2,9 +2,9 @@
 
 shopt -s extglob
 
-julia_install_version="0.1.0"
+julia_install_version="0.3.0"
 julia_install_dir="${BASH_SOURCE[0]%/*}"
-julia_install_cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}"
+julia_install_cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/src"
 
 julias=(julia)
 patches=()
@@ -14,12 +14,12 @@ make_opts=()
 system_dir="/usr/local"
 
 if (( UID == 0 )); then
-    # TODO these need to be move to XDG locations.
-	src_dir="$system_dir/src"
+  # The src_dir are XDG locations.
+	src_dir="${julia_install_cache_dir}"
 	julias_dir="/opt/julias"
 else
-    # TODO these need to be move to XDG locations.
-	src_dir="$HOME/src"
+  # The src_dir are XDG locations.
+	src_dir="${julia_install_cache_dir}"
 	julias_dir="$HOME/.julias"
 fi
 

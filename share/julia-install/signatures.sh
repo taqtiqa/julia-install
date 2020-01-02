@@ -8,14 +8,15 @@ unset GREP_OPTIONS GREP_COLOR GREP_COLORS
 #
 function lookup_signature_id()
 {
-    local signatures="$1"
+    local signatures="${1}"
     local file="${2##*/}"
 
-    if [[ ! -f "$signatures" ]]; then
+    if [[ ! -f "${signatures}" ]]; then
+        echo "Missing file ${signatures}."
         return 1
     fi
 
-    local output="$(grep "  $file" "$signatures")"
+    local output="$(grep "  $file" "${signatures}")"
     # Return the first field
     echo -n "${output%% *}"
 }
