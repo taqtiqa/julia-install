@@ -9,8 +9,9 @@ function msg() {
 }
 
 msg "Install julia-install"
-git clone --depth=1 https://github.com/taqtiqa/julia-install
+git clone --depth=1 https://github.com/taqtiqa-mark/julia-install
 cd julia-install
+git pull origin jl
 make install
 
 msg "Installing Julia using julia-install"
