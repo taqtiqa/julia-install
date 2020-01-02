@@ -245,7 +245,7 @@ function init()
 		warn "Unknown $julia version $julia_version. Proceeding anyways ..."
 	fi
 
-	julia_cache_dir="$julia_install_cache_dir/$julia"
+	julia_cache_dir="${julia_install_cache_dir}/${julia}"
 	install_dir="${install_dir:-$julias_dir/$julia-$julia_version}"
 
 	source "$julia_install_dir/functions.sh"       || return $?
