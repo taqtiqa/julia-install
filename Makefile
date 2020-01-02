@@ -1,7 +1,7 @@
 SHELL=/usr/bin/env bash
 NAME=julia-install
-VERSION=0.1.0
-AUTHOR=Mark Van de Vyver <mark@taqtiqa.com>
+VERSION=0.2.0
+AUTHOR=taqtiqa-mark
 URL=https://github.com/$(AUTHOR)/$(NAME)
 
 ifeq ($(OS),Windows_NT)
@@ -22,7 +22,7 @@ PKG_NAME=$(NAME)-$(VERSION)
 PKG=$(PKG_DIR)/$(PKG_NAME).tar.gz
 SIG=$(PKG_DIR)/$(PKG_NAME).asc
 
-PREFIX?=/usr/local
+PREFIX?=$(HOME)/.local
 SHARE_DIR=$(PREFIX)/share
 DOC_DIR=$(SHARE_DIR)/doc/$(PKG_NAME)
 
