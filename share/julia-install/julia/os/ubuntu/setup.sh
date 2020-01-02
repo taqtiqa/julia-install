@@ -32,5 +32,5 @@ pkgs='build-essential cmake gfortran libatomic1 m4 perl pkg-config python wget'
 ${sudo} apt-get install ${opts} ${pkgs}
 
 # Restore Apt settings
-rm /etc/apt/apt.conf.d/10periodic
+rm -rf /etc/apt/apt.conf.d/10periodic
 mv /etc/apt/apt.conf.d/10periodic.ji-bak /etc/apt/apt.conf.d/10periodic
