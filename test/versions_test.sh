@@ -1,23 +1,23 @@
 #!/usr/bin/env bash
 
 . ./test/helper.sh
-. ./share/ruby-install/versions.sh
+. ./share/julia-install/versions.sh
 
 versions_file="./test/versions.txt"
 stable_file="./test/stable.txt"
 
 function oneTimeSetUp()
 {
-	local commit="08cb86b18210e58fb9f85c0b4403e0a83f64fbf3"
-	local download_url="https://raw.githubusercontent.com/postmodern/ruby-versions/$commit"
+	local commit="12e1bf725791f606300eb3c746bafb9121564f3f"
+	local download_url="https://raw.githubusercontent.com/jlenv/julia-versions/$commit"
 
-	wget -q -O "$versions_file" "$download_url/ruby/versions.txt"
-	wget -q -O "$stable_file" "$download_url/ruby/stable.txt"
+	wget -q -O "$versions_file" "$download_url/julia/versions.txt"
+	wget -q -O "$stable_file" "$download_url/julia/stable.txt"
 }
 
 function test_is_known_version()
 {
-	local version="2.0.0-p576"
+	local version="1.0.0"
 
 	is_known_version "$versions_file" "$version"
 
@@ -27,7 +27,7 @@ function test_is_known_version()
 
 function test_is_known_version_with_invalid_file()
 {
-	local version="2.0.0-p576"
+	local version="1.0.0"
 
 	is_known_version "./test/foo/bar" "$version"
 
@@ -54,8 +54,8 @@ function test_is_known_version_with_invalid_version()
 
 function test_latest_version()
 {
-	local version="2.0"
-	local expected_version="2.0.0-p481"
+	local version="1.0"
+	local expected_version="1.0.5"
 
 	assertEquals "did not return the last matching version" \
 		     "$expected_version" \
@@ -64,7 +64,7 @@ function test_latest_version()
 
 function test_latest_version_with_empty_string()
 {
-	local expected_version="2.1.3"
+	local expected_version="1.0.5"
 
 	assertEquals "did not return the last version" \
 		     "$expected_version" \

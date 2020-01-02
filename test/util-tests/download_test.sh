@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
 . ./test/helper.sh
+. ./share/julia-install/util.sh
 
-URL="https://raw.github.com/postmodern/ruby-install/master/README.md"
+URL="https://raw.github.com/jlenv/julia-install/master/README.md"
 OUTPUT="./test/download.txt"
 
 function test_download()

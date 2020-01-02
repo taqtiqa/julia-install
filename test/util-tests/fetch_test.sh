@@ -2,12 +2,12 @@
 
 . ./test/helper.sh
 
-ruby_install_dir="./test/tmp"
-FILE="$ruby_install_dir/db.txt"
+julia_install_dir="./test/tmp"
+FILE="$julia_install_dir/db.txt"
 
 function setUp()
 {
-	mkdir "$ruby_install_dir"
+	mkdir "$julia_install_dir"
 }
 
 function test_fetch()
@@ -24,7 +24,7 @@ function test_fetch()
 
 function test_fetch_with_tabs()
 {
-	local key="ruby-1.9.3-p484.tar.bz2"
+	local key="julia-1.9.3-p484.tar.bz2"
 	local expected="03f5b08804927ceabe5122cb90f5d0a9"
 
 	echo -e "$key:\t$expected" > "$FILE"
@@ -36,7 +36,7 @@ function test_fetch_with_tabs()
 
 function test_fetch_with_excess_whitespace()
 {
-	local key="ruby-1.9.3-p484.tar.bz2"
+	local key="julia-1.9.3-p484.tar.bz2"
 	local expected="03f5b08804927ceabe5122cb90f5d0a9"
 
 	echo "$key:     $expected" > "$FILE"
@@ -60,7 +60,7 @@ function test_fetch_with_unknown_key()
 
 function tearDown()
 {
-	rm -r "$ruby_install_dir"
+	rm -r "$julia_install_dir"
 }
 
 SHUNIT_PARENT=$0 . $SHUNIT2

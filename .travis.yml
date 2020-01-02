@@ -1,8 +1,7 @@
-sudo: false
+sudo: true
 
 os:
   - linux
-  - osx
 
 language: c
 
@@ -21,4 +20,6 @@ before_script:
   - __rvm_unload
   - export SHUNIT2="$(command -v shunit2 2>/dev/null)"
 
-script: make test
+script: 
+  - make test
+  - bash test/ci.sh
