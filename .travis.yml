@@ -1,8 +1,7 @@
-sudo: false
+sudo: true
 
 os:
   - linux
-  - osx
 
 language: c
 
